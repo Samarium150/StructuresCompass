@@ -1,0 +1,23 @@
+{
+  "dimension.minecraft.overworld": "主世界",
+  "dimension.minecraft.the_nether": "下界",
+  "dimension.minecraft.the_end": "末地",
+  "structure.minecraft.bastion_remnant": "堡垒遗迹",
+  "structure.minecraft.buried_treasure": "埋藏的宝藏",
+  "structure.minecraft.desert_pyramid": "沙漠神殿",
+  "structure.minecraft.endcity": "末地城",
+  "structure.minecraft.fortress": "下界要塞",
+  "structure.minecraft.igloo": "雪屋",
+  "structure.minecraft.jungle_pyramid": "丛林神庙",
+  "structure.minecraft.mansion": "林地府邸",
+  "structure.minecraft.mineshaft": "废弃矿井",
+  "structure.minecraft.monument": "海底神殿",
+  "structure.minecraft.nether_fossil": "下界化石",
+  "structure.minecraft.ocean_ruin": "海底废墟",
+  "structure.minecraft.pillager_outpost": "掠夺者前哨站",
+  "structure.minecraft.ruined_portal": "废弃传送门",
+  "structure.minecraft.shipwreck": "沉船",
+  "structure.minecraft.stronghold": "要塞",
+  "structure.minecraft.swamp_hut": "女巫小屋",
+  "structure.minecraft.village": "村庄"
+}

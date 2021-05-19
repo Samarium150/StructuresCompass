@@ -1,0 +1,31 @@
+{
+  "item.structurescompass.structures_compass": "结构罗盘",
+
+  "string.structurescompass.select_structure": "选择结构",
+  "string.structurescompass.start_search": "开始搜索",
+  "string.structurescompass.search": "搜索",
+  "string.structurescompass.sort_by": "排序",
+  "string.structurescompass.skip_existing_chunks": "略过已存区块",
+
+  "string.structurescompass.name": "名称",
+  "string.structurescompass.source": "来源",
+  "string.structurescompass.dimension": "维度",
+
+  "string.structurescompass.msg_no_target": "没有设定搜索目标。请潜行右键来选择目标。",
+  "string.structurescompass.msg_error_name": "错误：找不到任何结构名为",
+  "string.structurescompass.msg_searching": "搜索中……",
+  "string.structurescompass.msg_done": "搜索完毕",
+
+  "string.structurescompass.hud_not_found": "未发现目标",
+  "string.structurescompass.hud_structure": "结构名称：",
+  "string.structurescompass.hud_dim": "维度名称：",
+  "string.structurescompass.hud_pos": "坐标：",
+  "string.structurescompass.hud_east": "东：",
+  "string.structurescompass.hud_west": "西：",
+  "string.structurescompass.hud_north": "北：",
+  "string.structurescompass.hud_south": "南：",
+  "string.structurescompass.hud_up": "上：",
+  "string.structurescompass.hud_down": "下：",
+  "string.structurescompass.hud_distance": "距离：",
+  "string.structurescompass.hud_wrong_dim": "错误的维度"
+}
