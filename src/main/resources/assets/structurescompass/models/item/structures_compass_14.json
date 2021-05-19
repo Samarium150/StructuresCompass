@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "structurescompass:item/structures_compass_14"
+  }
+}

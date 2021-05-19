@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+issueTrackerURL="https://github.com/Samarium150/StructuresCompass/issues"
+license="AFFERO GENERAL PUBLIC LICENSE Version 3"
+updateJSONURL="https://github.com/Samarium150/StructuresCompass/main/resources/META-INF/update.json"
+
+[[mods]]
+    modId="structurescompass"
+    version="${file.jarVersion}"
+    displayName="Structures Compass"
+    displayURL="https://github.com/Samarium150/StructuresCompass"
+    authors="Samarium, SnightW"
+    description='''
+    Search for a specific structure.
+    '''
