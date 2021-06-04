@@ -1,0 +1,12 @@
+com.github.samarium150.structurescompass
+com.github.samarium150.structurescompass.client
+com.github.samarium150.structurescompass.command
+com.github.samarium150.structurescompass.config
+com.github.samarium150.structurescompass.event
+com.github.samarium150.structurescompass.gui
+com.github.samarium150.structurescompass.init
+com.github.samarium150.structurescompass.item
+com.github.samarium150.structurescompass.network
+com.github.samarium150.structurescompass.network.packet
+com.github.samarium150.structurescompass.util
+com.github.samarium150.structurescompass.util.sort
