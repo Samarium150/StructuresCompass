@@ -1,9 +1,13 @@
-# StructuresCompass
+# Structures' Compass
 
-[![GitHub](https://img.shields.io/github/license/Samarium150/StructuresCompass?style=flat)](https://github.com/Samarium150/StructuresCompass/blob/master/LICENSE)
+[![Forge](https://cf.way2muchnoise.eu/491151.svg)](https://www.curseforge.com/minecraft/mc-mods/structures-compass)
+[![Minecraft](https://cf.way2muchnoise.eu/verions/491151_latest.svg)](https://minecraft.fandom.com/wiki/Java_Edition_1.16.5)
+[![GitHub](https://img.shields.io/github/license/Samarium150/StructuresCompass)](https://github.com/Samarium150/StructuresCompass/blob/master/LICENSE)
 [![Gradle CI](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml/badge.svg)](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml)
 
-Structures' Compass a Minecraft Forge mod allows player to quickly locate a specific [structures](https://minecraft.fandom.com/wiki/Generated_structures).
+[简体中文](docs/README-zh.md)
+
+Structures' Compass a Minecraft Forge mod allows player to quickly locate a specific [structure](https://minecraft.fandom.com/wiki/Generated_structures).
 
 This mod is inspired by [Nature's Compass](https://github.com/MattCzyr/NaturesCompass), and part of our code is from their mod.
 
