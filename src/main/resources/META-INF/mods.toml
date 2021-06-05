@@ -1,14 +1,15 @@
 modLoader="javafml"
 loaderVersion="[36,)"
 issueTrackerURL="https://github.com/Samarium150/StructuresCompass/issues"
-license="AFFERO GENERAL PUBLIC LICENSE Version 3"
+license="GNU GENERAL PUBLIC LICENSE Version 3"
 
 [[mods]]
     modId="structurescompass"
     version="${file.jarVersion}"
     displayName="Structures Compass"
-    updateJSONURL="https://github.com/Samarium150/StructuresCompass/main/resources/META-INF/update.json"
-    displayURL="https://github.com/Samarium150/StructuresCompass"
+    updateJSONURL="https://github.com/Samarium150/StructuresCompass/tree/main/docs/update.json"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/structures-compass"
+    logoFile="logo.gif"
     authors="Samarium, SnightW"
     description='''
     Search for a specific structure.
