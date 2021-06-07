@@ -1,7 +1,7 @@
 # Structures' Compass
 
 [![Forge](https://cf.way2muchnoise.eu/491151.svg)](https://www.curseforge.com/minecraft/mc-mods/structures-compass)
-[![Minecraft](https://cf.way2muchnoise.eu/verions/491151_latest.svg)](https://minecraft.fandom.com/wiki/Java_Edition_1.16.5)
+[![Minecraft](https://cf.way2muchnoise.eu/versions/491151_latest.svg)](https://minecraft.fandom.com/wiki/Java_Edition_1.16.5)
 [![GitHub](https://img.shields.io/github/license/Samarium150/StructuresCompass)](https://github.com/Samarium150/StructuresCompass/blob/master/LICENSE)
 [![Gradle CI](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml/badge.svg)](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml)
 
