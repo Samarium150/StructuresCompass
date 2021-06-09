@@ -54,7 +54,7 @@ public abstract class RenderUtils {
         else
             drawStringRight(
                 string,
-                minecraft.func_228018_at_().getScaledWidth()
+                minecraft.getMainWindow().getScaledWidth()
                     - fontRenderer.getStringWidth(string) - xOffset - StructuresCompassConfig.xOffset.get() + 5,
                 yOffset + StructuresCompassConfig.yOffset.get() - 14, color
             );
@@ -62,10 +62,10 @@ public abstract class RenderUtils {
     
     public static void updateBuffer(@Nonnull BufferBuilder buffer, int startX, int startY, int endX, int endY) {
         buffer.begin(7, DefaultVertexFormats.POSITION);
-        buffer.func_225582_a_(startX, endY, 0.0D).endVertex();
-        buffer.func_225582_a_(endX, endY, 0.0D).endVertex();
-        buffer.func_225582_a_(endX, startY, 0.0D).endVertex();
-        buffer.func_225582_a_(startX, startY, 0.0D).endVertex();
+        buffer.pos(startX, endY, 0.0D).endVertex();
+        buffer.pos(endX, endY, 0.0D).endVertex();
+        buffer.pos(endX, startY, 0.0D).endVertex();
+        buffer.pos(startX, startY, 0.0D).endVertex();
     }
     
     public static void drawRect(int left, int top, int right, int bottom, int color) {
@@ -90,7 +90,6 @@ public abstract class RenderUtils {
             GlStateManager.DestFactor.ZERO
         );
         
-        // Annotated as deprecated but no replacement
         RenderSystem.color4f(red, green, blue, alpha);
         
         updateBuffer(buffer, left, top, right, bottom);

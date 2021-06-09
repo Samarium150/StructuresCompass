@@ -22,14 +22,13 @@ public final class ClientEventHandler {
     
     @SubscribeEvent
     public static void onRenderOverlay(@Nonnull final RenderGameOverlayEvent event) {
-        // TODO: FIX HUD RENDERING
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
-
-        if (minecraft.world == null ||
+        if (
+            minecraft.world == null ||
                 minecraft.player == null ||
                 minecraft.player.getHeldItemMainhand().getItem() != ItemRegistry.STRUCTURES_COMPASS.get() ||
-                minecraft.gameSettings.hideGUI)
-            return;
+                minecraft.gameSettings.hideGUI
+        ) return;
         new StructuresCompassHUD().render();
     }
 }

@@ -49,36 +49,6 @@ public final class StructureSearchEntry extends AbstractListEntry<StructureSearc
         return structure;
     }
     
-//    @SuppressWarnings("deprecation")
-//    @Override
-//    public void render(
-//        @Nonnull MatrixStack matrixStack,
-//        int index, int top, int left, int width, int height, int mouseX, int mouseY,
-//        boolean isMouseOver, float partialTicks
-//    ) {
-//        minecraft.fontRenderer.drawString(
-//            StructureUtils.getLocalizedStructureName(structure),
-//            left + 1, top + 1, 0xffffff
-//        );
-//        minecraft.fontRenderer.drawString(
-//            I18n.format("string.structurescompass.source") + ": " + StructureUtils.getStructureSource(structure),
-//            left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 3, 0x808080);
-////        minecraft.fontRenderer.drawText(matrixStack,
-////            new StringTextComponent(I18n.format("string.structurescompass.source") + ": "
-////                                        + StructureUtils.getStructureSource(structure)),
-////            left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 3, 0x808080
-////        );
-//        minecraft.fontRenderer.drawString(
-//            I18n.format("string.structurescompass.dimension") + ": " + StructureUtils.getDimensions(structure),
-//            left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 14, 0x808080);
-////        minecraft.fontRenderer.drawText(
-////            new StringTextComponent(I18n.format("string.structurescompass.dimension") + ": "
-////                                        + StructureUtils.getDimensions(structure)),
-////            left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 14, 0x808080
-////        );
-//        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//    }
-    
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
@@ -104,19 +74,9 @@ public final class StructureSearchEntry extends AbstractListEntry<StructureSearc
         minecraft.fontRenderer.drawString(
             I18n.format("string.structurescompass.source") + ": " + StructureUtils.getStructureSource(structure),
             left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 3, 0x808080);
-//        minecraft.fontRenderer.drawText(matrixStack,
-//            new StringTextComponent(I18n.format("string.structurescompass.source") + ": "
-//                                        + StructureUtils.getStructureSource(structure)),
-//            left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 3, 0x808080
-//        );
         minecraft.fontRenderer.drawString(
             I18n.format("string.structurescompass.dimension") + ": " + StructureUtils.getDimensions(structure),
             left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 14, 0x808080);
-//        minecraft.fontRenderer.drawText(
-//            new StringTextComponent(I18n.format("string.structurescompass.dimension") + ": "
-//                                        + StructureUtils.getDimensions(structure)),
-//            left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 14, 0x808080
-//        );
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

@@ -59,11 +59,9 @@ public final class StructureSearchList extends ExtendedList<StructureSearchEntry
         changeFocus(false);
     }
     
-    public void restoreScrollAmount() {
-        if (getSelected() != null) {
+    public void restoreFocus() {
+        if (getSelected() != null)
             changeFocus(true);
-            setScrollAmount(this.getScrollAmount() + itemHeight * 2);
-        }
     }
     
     @Override

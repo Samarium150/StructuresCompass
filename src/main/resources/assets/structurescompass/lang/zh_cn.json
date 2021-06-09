@@ -2,7 +2,7 @@
   "item.structurescompass.structures_compass": "结构罗盘",
 
   "string.structurescompass.select_structure": "选择结构",
-  "string.structurescompass.start_search": "开始搜索",
+  "string.structurescompass.start_searching": "开始搜索",
   "string.structurescompass.search": "搜索",
   "string.structurescompass.sort_by": "排序",
   "string.structurescompass.skip_existing_chunks": "略过已存区块",

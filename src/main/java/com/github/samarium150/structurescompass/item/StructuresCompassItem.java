@@ -50,23 +50,19 @@ public final class StructuresCompassItem extends Item {
      */
     public StructuresCompassItem() {
         super(new Item.Properties().group(ItemGroup.TOOLS).maxStackSize(1).rarity(Rarity.COMMON));
-        this.addPropertyOverride(new ResourceLocation("angle"), new StructuresCompassItemPropertyGetter());
     }
     
     /**
      * Set the tag of structure's ResourceLocation
      * @param name the ResourceLocation of the structure
      * @param stack ItemStack
-     * @return the given ItemStack
      */
-    @Nonnull
-    public static ItemStack setStructureName(String name, @Nonnull ItemStack stack) {
+    public static void setStructureName(String name, @Nonnull ItemStack stack) {
         CompoundNBT tag = ItemUtils.getOrCreateItemTag(stack);
         if (tag != null) {
             tag.put(STRUCTURE_TAG, StringNBT.valueOf(name));
             stack.setTag(tag);
         }
-        return stack;
     }
     
     /**
@@ -170,10 +166,11 @@ public final class StructuresCompassItem extends Item {
     ) {
         ResourceLocation registry = structure.getRegistryName();
         assert registry != null;
-        setStructureName(registry.toString(), stack);
+        String resource = registry.toString();
+        setStructureName(resource, stack);
         sendTranslatedMessage("string.structurescompass.msg_searching", player);
         BlockPos pos = world.findNearestStructure(
-            registry.toString().replace("minecraft:", ""),
+            StructureUtils.cleanupResourceName(resource.replace("minecraft:", "")),
             player.getPosition(), StructuresCompassConfig.radius.get(), isSkip(stack)
         );
         sendTranslatedMessage("string.structurescompass.msg_done", player);
@@ -187,7 +184,7 @@ public final class StructuresCompassItem extends Item {
                 ItemUtils.removeTag(stack, DIM_TAG);
                 ItemUtils.removeTag(stack, POS_TAG);
             } else {
-                setDimension(world.getDimension().getType().toString(), stack);
+                setDimension(StructureUtils.getDimensionName(world.getDimension().getType()), stack);
                 setPos(pos, stack);
             }
         }
@@ -231,7 +228,9 @@ public final class StructuresCompassItem extends Item {
                     sendMessage(I18n.format("string.structurescompass.msg_no_target"), player);
                     return super.onItemRightClick(world, player, hand);
                 }
-                Structure<?> structure = Feature.STRUCTURES.get(name.replace("minecraft:", ""));
+                Structure<?> structure = Feature.STRUCTURES.get(
+                    StructureUtils.cleanupResourceName(name.replace("minecraft:", ""))
+                );
                 if (structure == null) {
                     sendMessage(I18n.format("string.structurescompass.msg_error_name") + name, player);
                     return super.onItemRightClick(world, player, hand);

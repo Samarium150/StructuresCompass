@@ -150,7 +150,7 @@ public final class StructuresCompassScreen extends Screen {
     public void restoreSelected() {
         if (selected != null && structuresMatchingSearch.contains(selected))
             selectionList.selectStructure(selected);
-        selectionList.restoreScrollAmount();
+        selectionList.restoreFocus();
     }
     
     @Override
@@ -166,7 +166,7 @@ public final class StructuresCompassScreen extends Screen {
         if (selected != null) {
             selectionList.selectStructure(StructureUtils.getStructureForResource(new ResourceLocation(selected)));
             selectionList.changeFocus(true);
-            selectionList.restoreScrollAmount();
+            selectionList.restoreFocus();
         }
         children.add(selectionList);
     }

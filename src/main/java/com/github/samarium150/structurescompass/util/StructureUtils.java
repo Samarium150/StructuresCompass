@@ -7,6 +7,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.server.ServerWorld;
@@ -81,6 +83,16 @@ public abstract class StructureUtils {
         return StructuresCompassConfig.blacklist.get().contains(name);
     }
     
+    @Nonnull
+    public static String cleanupResourceName(@Nonnull String resource) {
+        return resource
+                   .replace("nether_bridge", "fortress")
+                   .replace("end_city", "endcity")
+                   .replace("jungle_temple", "jungle_pyramid")
+                   .replace("ocean_monument", "monument")
+                   .replace("woodland_mansion", "mansion");
+    }
+    
     /**
      * Get the name of the structure
      * @param structure the given structure
@@ -104,8 +116,7 @@ public abstract class StructureUtils {
         int split = resource.indexOf(":");
         if (split == -1) return resource;
         String source = resource.substring(0, split);
-        String name = resource.substring(split + 1);
-        // TODO: FIX SOME TRANSLATION
+        String name = cleanupResourceName(resource.substring(split + 1));
         return I18n.format(String.format("structure.%s.%s", source, name));
     }
     
@@ -120,19 +131,31 @@ public abstract class StructureUtils {
         return getLocalizedStructureName(getStructureName(structure));
     }
     
+    @Nonnull
+    @SuppressWarnings("deprecation")
+    public static String getDimensionName(@Nonnull DimensionType dimType) {
+        ResourceLocation resource = Registry.DIMENSION_TYPE.getKey(dimType);
+        return (resource == null) ? "" : resource.toString();
+    }
+    
     /**
      * Get a list of dimensions that will generate the structure
      * @param world player's server world
      * @param structure the given structure
      * @return a list of dimensions
      */
+    @SuppressWarnings("deprecation")
     @Nonnull
     public static List<String> getDimensions(@Nonnull ServerWorld world, Structure<?> structure) {
         final List<String> dims = new ArrayList<>();
         MinecraftServer server = world.getServer();
-        server.getWorlds().forEach(w->{
+        Registry<DimensionType> registry = Registry.DIMENSION_TYPE;
+        registry.keySet().forEach(res -> {
+            DimensionType dim = registry.getOrDefault(res);
+            assert dim != null;
+            ServerWorld w = server.getWorld(dim);
             if (w.getChunkProvider().getChunkGenerator().getBiomeProvider().hasStructure(structure))
-                dims.add(w.getDimension().getType().toString());
+                dims.add(getDimensionName(w.getDimension().getType()));
         });
         return dims;
     }

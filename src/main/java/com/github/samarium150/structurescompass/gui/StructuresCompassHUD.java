@@ -87,7 +87,7 @@ public final class StructuresCompassHUD extends AbstractGui {
                         5, 5, 0x4AFF4A, ++relLineOffset
                     );
             
-                    if (player.getEntityWorld().getDimension().getType().toString().equals(dim)) {
+                    if (StructureUtils.getDimensionName(player.getEntityWorld().getDimension().getType()).equals(dim)) {
     
                         Vec3d dis = StructureUtils.getDistance(pos, player);
                         double disX = dis.getX();

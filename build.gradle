@@ -34,7 +34,7 @@ logger.quiet('Java: {} JVM: {}({}) Arch: {}',
 sourceSets.main.java { srcDir 'src/main/java' }
 
 minecraft {
-    mappings channel: 'stable', version: '60-1.15'
+    mappings channel: 'snapshot', version: '20210609-1.15.1'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
