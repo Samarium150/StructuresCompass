@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
@@ -79,7 +81,7 @@ tasks.named("jar").configure {
             "Implementation-Title": project.name,
             "Implementation-Version": project.version,
             "Implementation-Vendor" :"Samarium, SnightW",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd")
+            "Implementation-Timestamp": new SimpleDateFormat("yyyy-MM-dd").format(new Date())
         ])
     }
 }
