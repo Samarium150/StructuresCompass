@@ -1,0 +1,23 @@
+{
+  "dimension.minecraft.overworld": "Superficie",
+  "dimension.minecraft.the_nether": "El Nether",
+  "dimension.minecraft.the_end": "El End",
+  "structure.minecraft.bastion_remnant": "Bastión en ruinas",
+  "structure.minecraft.buried_treasure": "Tesoro enterrado",
+  "structure.minecraft.desert_pyramid": "Templo del desierto",
+  "structure.minecraft.endcity": "Ciudad del End",
+  "structure.minecraft.fortress": "Fortaleza del Nether",
+  "structure.minecraft.igloo": "Iglú",
+  "structure.minecraft.jungle_pyramid": "Templo de jungla",
+  "structure.minecraft.mansion": "Mansión del bosque",
+  "structure.minecraft.mineshaft": "Mina abandonada",
+  "structure.minecraft.monument": "Monumento oceánico",
+  "structure.minecraft.nether_fossil": "Fósil del Nether",
+  "structure.minecraft.ocean_ruin": "Ruina oceánica",
+  "structure.minecraft.pillager_outpost": "Puesto de saqueadores",
+  "structure.minecraft.ruined_portal": "Portal en ruinas",
+  "structure.minecraft.shipwreck": "Naufragio",
+  "structure.minecraft.stronghold": "Fortaleza",
+  "structure.minecraft.swamp_hut": "Cabaña de brujas",
+  "structure.minecraft.village": "Aldea"
+}
