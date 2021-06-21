@@ -13,6 +13,7 @@ public final class StructuresCompassConfig {
     public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> blacklist;
     public static final ForgeConfigSpec.DoubleValue maxDistance;
     public static final ForgeConfigSpec.IntValue radius;
+    public static final ForgeConfigSpec.BooleanValue easyCrafting;
     
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -33,6 +34,10 @@ public final class StructuresCompassConfig {
                          "If you still couldn't find a structure with a big enough MaxSearchRadius, increase this one.",
                          "If you think searching makes the server slow, decrease this one.")
                      .defineInRange("RealRadius", 64, 1 , 128);
+        
+        easyCrafting = builder
+                           .comment("Easy Crafting", "Using Iron bars instead of dead corals")
+                           .define("EasyCrafting", true);
         
         COMMON_CONFIG = builder.build();
         builder.pop();

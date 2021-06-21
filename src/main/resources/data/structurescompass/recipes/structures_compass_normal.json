@@ -1,6 +1,7 @@
 {
   "group": "tools",
-  "type": "minecraft:crafting_shaped",
+  "type": "structurescompass:recipe",
+  "condition": "normal",
   "pattern": [
     "012",
     "345",
