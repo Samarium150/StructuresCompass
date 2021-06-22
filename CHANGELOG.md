@@ -1,3 +1,16 @@
+<a name="1.16.5-1.1.0"></a>
+# 1.16.5-1.1.0 (2021/06/21)
+
+
+## Bug Fixes
+
+* correct the entry for starting searching ([e86d1857](https://github.com/Samarium150/StructuresCompass/commits/e86d1857))
+
+## Features
+
+* add es_es ([de3de7e6](https://github.com/Samarium150/StructuresCompass/commits/de3de7e6))
+* implement configurable recipes ([e92ee397](https://github.com/Samarium150/StructuresCompass/commits/e92ee397))
+* Able to change HUD information detailed level ([da9c6370](https://github.com/Samarium150/StructuresCompass/commits/da9c6370))
 <a name="1.16.5-1.0.2"></a>
 ## 1.16.5-1.0.2 (2021/06/07)
 
