@@ -38,6 +38,8 @@ The HUD for displaying the information of a found structure
 
 We think the compass is too op, so we increase the crafting difficulty to balance it.
 
+**v1.1.0**: Now you can change the config to use iron bars instead of dead corals
+
 ## Further Development
 
 We're too busy to develop, so we just list some possibilities
