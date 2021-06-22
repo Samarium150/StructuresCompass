@@ -1,7 +1,7 @@
 # Structures' Compass
 
-[![Forge](https://cf.way2muchnoise.eu/491151.svg)](https://www.curseforge.com/minecraft/mc-mods/structures-compass)
-[![Minecraft](https://cf.way2muchnoise.eu/verions/491151_latest.svg)](https://minecraft.fandom.com/wiki/Java_Edition_1.16.5)
+[![Forge](http://cf.way2muchnoise.eu/491151.svg)](https://www.curseforge.com/minecraft/mc-mods/structures-compass)
+[![Minecraft](http://cf.way2muchnoise.eu/versions/For%20MC_491151_all.svg)](https://minecraft.fandom.com/wiki/Java_Edition_1.16.5)
 [![GitHub](https://img.shields.io/github/license/Samarium150/StructuresCompass)](https://github.com/Samarium150/StructuresCompass/blob/master/LICENSE)
 [![Gradle CI](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml/badge.svg)](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml)
 
@@ -37,6 +37,8 @@ The HUD for displaying the information of a found structure
 4 of any dead coral at 4 corners, 4 of mossy stone bricks at 4 edges and 1 compass at the center
 
 We think the compass is too op, so we increase the crafting difficulty to balance it.
+
+**v1.1.0**: Now you can change the config to use iron bars instead of dead corals
 
 ## Further Development
 
