@@ -38,7 +38,8 @@ public final class StructuresCompassHUD extends AbstractGui {
      */
     public void render() {
         
-        if ((minecraft.currentScreen == null || (StructuresCompassConfig.displayWithChatOpen.get()
+        if (StructuresCompassConfig.HUD_Level.get() != 0 &&
+                (minecraft.currentScreen == null || (StructuresCompassConfig.displayWithChatOpen.get()
                                                             && minecraft.currentScreen instanceof ChatScreen))) {
             final PlayerEntity player = minecraft.player;
             final ItemStack stack;
@@ -79,13 +80,15 @@ public final class StructuresCompassHUD extends AbstractGui {
                         5, 5, 0xAAAAAA, ++relLineOffset
                     );
                     relLineOffset++;
-            
-                    String temp = pos.getY() == 0 ? ", X, " : ", " + pos.getY() + ", ";
-                    temp = I18n.format("string.structurescompass.hud_pos") + " [" + pos.getX() + temp + pos.getZ() + "]";
-                    RenderUtils.drawConfiguredStringOnHUD(
-                        temp,
-                        5, 5, 0x4AFF4A, ++relLineOffset
-                    );
+
+                    if (StructuresCompassConfig.HUD_Level.get() == 3) {
+                        String temp = pos.getY() == 0 ? ", X, " : ", " + pos.getY() + ", ";
+                        temp = I18n.format("string.structurescompass.hud_pos") + " [" + pos.getX() + temp + pos.getZ() + "]";
+                        RenderUtils.drawConfiguredStringOnHUD(
+                            temp,
+                            5, 5, 0x4AFF4A, ++relLineOffset
+                        );
+                    }
             
                     if (StructureUtils.getDimensionName(player.getEntityWorld().getDimension().getType()).equals(dim)) {
     
@@ -95,40 +98,41 @@ public final class StructuresCompassHUD extends AbstractGui {
                         double disZ = dis.getZ();
                         double distance = (double) Math.round(Math.sqrt(disX * disX + disY * disY + disZ * disZ) * 100) / 100;
                 
-                        if (disX > StructuresCompassConfig.closeEnough.get())
+                        if (StructuresCompassConfig.HUD_Level.get() == 3 && disX > StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
                                 I18n.format("string.structurescompass.hud_east") + disX,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
-                        else if (disX < -StructuresCompassConfig.closeEnough.get())
+                        else if (StructuresCompassConfig.HUD_Level.get() == 3 && disX < -StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
                                 I18n.format("string.structurescompass.hud_west") + -disX,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
                 
-                        if (disZ > StructuresCompassConfig.closeEnough.get())
+                        if (StructuresCompassConfig.HUD_Level.get() == 3 && disZ > StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
                                 I18n.format("string.structurescompass.hud_south") + disZ,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
-                        else if (disZ < -StructuresCompassConfig.closeEnough.get())
+                        else if (StructuresCompassConfig.HUD_Level.get() == 3 && disZ < -StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
                                 I18n.format("string.structurescompass.hud_north") + -disZ,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
                 
-                        if (disY > StructuresCompassConfig.closeEnough.get())
+                        if (StructuresCompassConfig.HUD_Level.get() == 3 && disY > StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
                                 I18n.format("string.structurescompass.hud_up") + disY,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
-                        else if (disY < -StructuresCompassConfig.closeEnough.get())
+                        else if (StructuresCompassConfig.HUD_Level.get() == 3 && disY < -StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
                                 I18n.format("string.structurescompass.hud_down") + -disY,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
                 
-                        if (relLineOffset > 6) {
+                        if ((StructuresCompassConfig.HUD_Level.get() == 3 && relLineOffset > 6) ||
+                            (StructuresCompassConfig.HUD_Level.get() >= 2 && distance > StructuresCompassConfig.closeEnough.get())) {
                             relLineOffset++;
                             RenderUtils.drawConfiguredStringOnHUD(
                                 I18n.format("string.structurescompass.hud_distance") + distance,
