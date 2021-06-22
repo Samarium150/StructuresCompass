@@ -1,7 +1,7 @@
 # Structures' Compass
 
 [![Forge](http://cf.way2muchnoise.eu/491151.svg)](https://www.curseforge.com/minecraft/mc-mods/structures-compass)
-[![Minecraft](http://cf.way2muchnoise.eu/versions/491151_latest.svg)](https://minecraft.fandom.com/wiki/Java_Edition_1.16.5)
+[![Minecraft](http://cf.way2muchnoise.eu/versions/For%20MC_491151_all.svg)](https://minecraft.fandom.com/wiki/Java_Edition_1.16.5)
 [![GitHub](https://img.shields.io/github/license/Samarium150/StructuresCompass)](https://github.com/Samarium150/StructuresCompass/blob/master/LICENSE)
 [![Gradle CI](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml/badge.svg)](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml)
 
@@ -34,6 +34,8 @@
 4个任意失活珊瑚放在4个角，4个苔石砖放在4条边，最后原版指南针放中间
 
 为了平衡罗盘的能力，我们上调了一些制作难度
+
+**v1.1.0**: 可以在配置文件中选择用铁栅栏来代替失活珊瑚
 
 ## 下一步开发
 
