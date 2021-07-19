@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * General utilities for all other classes
@@ -26,5 +28,19 @@ public abstract class GeneralUtils {
     @SafeVarargs
     public static <T> T swap(@Nonnull T...args) {
         return args[0];
+    }
+    
+    /**
+     * Split string into equal-length substrings
+     * @param text target string
+     * @param size size of substrings
+     * @return list of substrings
+     */
+    @Nonnull
+    public static List<String> splitEqually(@Nonnull String text, int size) {
+        List<String> ret = new ArrayList<>((text.length() + size - 1) / size);
+        for (int start = 0; start < text.length(); start += size)
+            ret.add(text.substring(start, Math.min(text.length(), start + size)));
+        return ret;
     }
 }
