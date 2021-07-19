@@ -1,3 +1,14 @@
+<a name="1.16.5-1.1.1"></a>
+# 1.16.5-1.1.1 (2021/07/19)
+
+
+## Bug Fixes
+
+* string will not overflow when encode packets ([99132df3](https://github.com/Samarium150/StructuresCompass/commits/99132df3), closes [#9](https://github.com/Samarium150/StructuresCompass/issues/9), [#7](https://github.com/Samarium150/StructuresCompass/issues/7))
+
+## Refactor
+
+* cleanup
 <a name="1.16.5-1.1.0"></a>
 # 1.16.5-1.1.0 (2021/06/21)
 
