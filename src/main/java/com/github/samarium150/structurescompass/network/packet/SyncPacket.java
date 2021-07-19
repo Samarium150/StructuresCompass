@@ -52,8 +52,11 @@ public final class SyncPacket implements Packet, Serializer<HashMap<String, List
         for (int i = 0; i < size; ++i)
             allowed.add(StructureUtils.getStructureForResource(buffer.readResourceLocation()));
         HashMap<String, List<String>> temp = new HashMap<>();
+        size = buffer.readInt();
+        StringBuilder serialized = new StringBuilder();
         try {
-            temp = this.deserialize(buffer.readString());
+            for (int i = 0; i < size; ++i) serialized.append(buffer.readString());
+            temp = this.deserialize(serialized.toString());
             temp.replaceAll((k, v) -> v.stream().map(StructureUtils::getLocalizedDimensionName).collect(Collectors.toList()));
         } catch (Exception e) {
             GeneralUtils.logger.error(e);
@@ -74,7 +77,11 @@ public final class SyncPacket implements Packet, Serializer<HashMap<String, List
             GeneralUtils.logger.error(e);
             return;
         }
-        buffer.writeString(serialized);
+        List<String> ret = GeneralUtils.splitEqually(serialized, 15000);
+        int size = ret.size();
+        buffer.writeInt(size);
+        for (String s : ret)
+            buffer.writeString(s);
     }
     
     @Override
