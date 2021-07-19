@@ -1,3 +1,10 @@
+<a name="1.15.2-1.1.1"></a>
+# 1.15.2-1.1.1 (2021/07/20)
+
+
+## Bug Fixes
+
+* string will not overflow when encode packets ([300fb48a](https://github.com/Samarium150/StructuresCompass/commits/300fb48a))
 <a name="1.15.2-1.1.0"></a>
 # 1.15.2-1.1.0 (2021/06/21)
 
