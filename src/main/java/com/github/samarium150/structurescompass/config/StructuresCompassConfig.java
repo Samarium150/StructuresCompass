@@ -13,7 +13,6 @@ public final class StructuresCompassConfig {
     public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> blacklist;
     public static final ForgeConfigSpec.DoubleValue maxDistance;
     public static final ForgeConfigSpec.IntValue radius;
-    public static final ForgeConfigSpec.BooleanValue easyCrafting;
     public static final ForgeConfigSpec.IntValue HUD_Level;
     
     static {
@@ -34,10 +33,6 @@ public final class StructuresCompassConfig {
                          "If you think searching makes the server slow, decrease this one.")
                      .defineInRange("RealRadius", 64, 1 , 128);
         
-        easyCrafting = builder
-                           .comment("\nEasy Crafting", "Using Iron bars instead of dead corals")
-                           .define("EasyCrafting", false);
-
         HUD_Level = builder
                             .comment("\nHUD information detail level.",
                                 "0: Nothing.",

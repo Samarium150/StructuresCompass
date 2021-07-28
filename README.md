@@ -38,7 +38,8 @@ The HUD for displaying the information of a found structure
 
 We think the compass is too op, so we increase the crafting difficulty to balance it.
 
-**v1.1.0**: Now you can change the config to use iron bars instead of dead corals
+~~**v1.1.0**: Now you can change the config to use iron bars instead of dead corals~~
+(deprecated in **v1.2.0** because of bug [#8](https://github.com/Samarium150/StructuresCompass/issues/8))
 
 ## Further Development
 

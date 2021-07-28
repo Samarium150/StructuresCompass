@@ -197,7 +197,7 @@ public final class StructuresCompassItem extends Item {
     }
     
     /**
-     * Handle the right clicking event
+     * Handle the right-clicking event
      * <p>
      * On the server side, do nothing
      * <p>

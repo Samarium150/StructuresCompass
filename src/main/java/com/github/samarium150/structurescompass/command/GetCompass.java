@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
  * @deprecated This command is used for early development
  *     but could still be used in the game
  */
+@SuppressWarnings("DeprecatedIsStillUsed")
 @Deprecated
 public final class GetCompass {
     
