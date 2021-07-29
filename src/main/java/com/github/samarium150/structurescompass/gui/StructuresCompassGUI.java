@@ -18,7 +18,7 @@ public final class StructuresCompassGUI {
      * @param stack ItemStack
      */
     public static void openGUI(ItemStack stack) {
-        Minecraft.getInstance().displayGuiScreen(
+        Minecraft.getInstance().setScreen(
             new StructuresCompassScreen(stack)
         );
     }

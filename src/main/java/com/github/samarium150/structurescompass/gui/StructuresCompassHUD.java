@@ -45,17 +45,17 @@ public final class StructuresCompassHUD extends AbstractGui {
     public void render() {
         
         if (StructuresCompassConfig.HUD_Level.get() != 0 &&
-                (minecraft.currentScreen == null || (StructuresCompassConfig.displayWithChatOpen.get()
-                                                            && minecraft.currentScreen instanceof ChatScreen))) {
+                (minecraft.screen == null || (StructuresCompassConfig.displayWithChatOpen.get()
+                                                            && minecraft.screen instanceof ChatScreen))) {
             final PlayerEntity player = minecraft.player;
             final ItemStack stack;
             assert player != null;
-            if (!player.getHeldItemMainhand().isEmpty()
-                    && player.getHeldItemMainhand().getItem() == ItemRegistry.STRUCTURES_COMPASS.get())
-                stack = player.getHeldItemMainhand();
-            else if (!player.getHeldItemOffhand().isEmpty()
-                         && player.getHeldItemOffhand().getItem() == ItemRegistry.STRUCTURES_COMPASS.get())
-                stack = player.getHeldItemOffhand();
+            if (!player.getMainHandItem().isEmpty()
+                    && player.getMainHandItem().getItem() == ItemRegistry.STRUCTURES_COMPASS.get())
+                stack = player.getMainHandItem();
+            else if (!player.getOffhandItem().isEmpty()
+                         && player.getOffhandItem().getItem() == ItemRegistry.STRUCTURES_COMPASS.get())
+                stack = player.getOffhandItem();
             else return;
             if (stack.getItem() instanceof StructuresCompassItem) {
                 String feature = StructuresCompassItem.getStructureName(stack);
@@ -65,12 +65,12 @@ public final class StructuresCompassHUD extends AbstractGui {
                 if (feature == null) return;
                 if (pos == null || dim == null) {
                     RenderUtils.drawConfiguredStringOnHUD(
-                        matrixStack, I18n.format("string.structurescompass.hud_not_found"),
+                        matrixStack, I18n.get("string.structurescompass.hud_not_found"),
                         5, 5, 0xAA2116, relLineOffset
                     );
                 } else {
                     RenderUtils.drawConfiguredStringOnHUD(
-                        matrixStack, I18n.format("string.structurescompass.hud_structure"),
+                        matrixStack, I18n.get("string.structurescompass.hud_structure"),
                         5, 5, 0xFFFFFF, relLineOffset);
                     RenderUtils.drawConfiguredStringOnHUD(
                         matrixStack, StructureUtils.getLocalizedStructureName(feature),
@@ -78,7 +78,7 @@ public final class StructuresCompassHUD extends AbstractGui {
                     relLineOffset++;
             
                     RenderUtils.drawConfiguredStringOnHUD(
-                        matrixStack, I18n.format("string.structurescompass.hud_dim"),
+                        matrixStack, I18n.get("string.structurescompass.hud_dim"),
                         5, 5, 0xFFFFFF, ++relLineOffset
                     );
                     RenderUtils.drawConfiguredStringOnHUD(
@@ -89,51 +89,51 @@ public final class StructuresCompassHUD extends AbstractGui {
 
                     if (StructuresCompassConfig.HUD_Level.get() == 3) {
                         String temp = pos.getY() == 0 ? ", X, " : ", " + pos.getY() + ", ";
-                        temp = I18n.format("string.structurescompass.hud_pos") + " [" + pos.getX() + temp + pos.getZ() + "]";
+                        temp = I18n.get("string.structurescompass.hud_pos") + " [" + pos.getX() + temp + pos.getZ() + "]";
                         RenderUtils.drawConfiguredStringOnHUD(
                             matrixStack, temp,
                             5, 5, 0x4AFF4A, ++relLineOffset
                         );
                     }
             
-                    if (player.getEntityWorld().getDimensionKey().getLocation().toString().equals(dim)) {
+                    if (player.getCommandSenderWorld().dimension().location().toString().equals(dim)) {
                 
                         Vector3d dis = StructureUtils.getDistance(pos, player);
-                        double disX = dis.getX();
-                        double disY = dis.getY();
-                        double disZ = dis.getZ();
+                        double disX = dis.x();
+                        double disY = dis.y();
+                        double disZ = dis.z();
                         double distance = (double) Math.round(Math.sqrt(disX * disX + disY * disY + disZ * disZ) * 100) / 100;
                 
                         if (StructuresCompassConfig.HUD_Level.get() == 3 && disX > StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
-                                matrixStack, I18n.format("string.structurescompass.hud_east") + disX,
+                                matrixStack, I18n.get("string.structurescompass.hud_east") + disX,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
                         else if (StructuresCompassConfig.HUD_Level.get() == 3 && disX < -StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
-                                matrixStack, I18n.format("string.structurescompass.hud_west") + -disX,
+                                matrixStack, I18n.get("string.structurescompass.hud_west") + -disX,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
                 
                         if (StructuresCompassConfig.HUD_Level.get() == 3 && disZ > StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
-                                matrixStack, I18n.format("string.structurescompass.hud_south") + disZ,
+                                matrixStack, I18n.get("string.structurescompass.hud_south") + disZ,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
                         else if (StructuresCompassConfig.HUD_Level.get() == 3 && disZ < -StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
-                                matrixStack, I18n.format("string.structurescompass.hud_north") + -disZ,
+                                matrixStack, I18n.get("string.structurescompass.hud_north") + -disZ,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
                 
                         if (StructuresCompassConfig.HUD_Level.get() == 3 && disY > StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
-                                matrixStack, I18n.format("string.structurescompass.hud_up") + disY,
+                                matrixStack, I18n.get("string.structurescompass.hud_up") + disY,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
                         else if (StructuresCompassConfig.HUD_Level.get() == 3 && disY < -StructuresCompassConfig.closeEnough.get())
                             RenderUtils.drawConfiguredStringOnHUD(
-                                matrixStack, I18n.format("string.structurescompass.hud_down") + -disY,
+                                matrixStack, I18n.get("string.structurescompass.hud_down") + -disY,
                                 5, 5, 0xFFFFFF, ++relLineOffset
                             );
                 
@@ -141,14 +141,14 @@ public final class StructuresCompassHUD extends AbstractGui {
                             (StructuresCompassConfig.HUD_Level.get() >= 2 && distance > StructuresCompassConfig.closeEnough.get())) {
                             relLineOffset++;
                             RenderUtils.drawConfiguredStringOnHUD(
-                                matrixStack, I18n.format("string.structurescompass.hud_distance") + distance,
+                                matrixStack, I18n.get("string.structurescompass.hud_distance") + distance,
                                 5, 5, 0xFFC20E, ++relLineOffset
                             );
                         }
                     } else {
                         relLineOffset++;
                         RenderUtils.drawConfiguredStringOnHUD(
-                            matrixStack, I18n.format("string.structurescompass.hud_wrong_dim"),
+                            matrixStack, I18n.get("string.structurescompass.hud_wrong_dim"),
                             5, 5, 0xAA2116, ++relLineOffset
                         );
                     }

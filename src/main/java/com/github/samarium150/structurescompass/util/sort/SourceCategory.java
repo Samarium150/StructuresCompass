@@ -28,6 +28,6 @@ public final class SourceCategory implements Category {
     @Nonnull
     @Override
     public String getLocalizedName() {
-        return I18n.format("string.structurescompass.source");
+        return I18n.get("string.structurescompass.source");
     }
 }

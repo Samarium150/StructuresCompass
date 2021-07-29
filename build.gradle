@@ -16,7 +16,8 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
-def baseVersion = '1.2.0'
+def previousVersion = '1.2.0'
+def baseVersion = '1.2.1'
 def minecraftVersion = '1.16.5'
 version = "${minecraftVersion}-${baseVersion}" as Object
 group = 'com.github.samarium150'
@@ -41,7 +42,7 @@ sourceSets {
 def mainSourceSet = sourceSets.main
 
 minecraft {
-    mappings channel: 'snapshot', version: '20210309-1.16.5'
+    mappings channel: 'official', version: '1.16.5'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
@@ -75,7 +76,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.2'
 }
 
-tasks.withType(JavaCompile) {
+compileJava {
     options.encoding("UTF-8")
 }
 
@@ -95,8 +96,9 @@ tasks.named("jar").configure {
 jar.finalizedBy('reobfJar')
 
 changelog {
-    appName "${project.name}"
-    versionNum "${project.version}"
+    appName name
+    versionNum version as String
+    from("${minecraftVersion}-${previousVersion}")
     repoUrl "https://github.com/Samarium150/StructuresCompass"
     trackerUrl "https://github.com/Samarium150/StructuresCompass"
 }

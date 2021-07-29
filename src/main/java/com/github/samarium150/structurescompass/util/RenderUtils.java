@@ -29,16 +29,16 @@ import javax.annotation.Nonnull;
 public abstract class RenderUtils {
     
     private static final Minecraft minecraft = Minecraft.getInstance();
-    private static final FontRenderer fontRenderer = minecraft.fontRenderer;
+    private static final FontRenderer fontRenderer = minecraft.font;
     
     private RenderUtils() { }
     
     private static void drawStringLeft(MatrixStack matrixStack, String string, int x, int y, int color) {
-        fontRenderer.drawString(matrixStack, string, x, y, color);
+        fontRenderer.draw(matrixStack, string, x, y, color);
     }
     
     private static void drawStringRight(MatrixStack matrixStack, String string, int x, int y, int color) {
-        fontRenderer.drawString(matrixStack, string, x, y, color);
+        fontRenderer.draw(matrixStack, string, x, y, color);
     }
     
     public static void drawConfiguredStringOnHUD(
@@ -52,17 +52,17 @@ public abstract class RenderUtils {
         else
             drawStringRight(
                 matrixStack, string,
-                minecraft.getMainWindow().getScaledWidth() - fontRenderer.getStringWidth(string) - xOffset - StructuresCompassConfig.xOffset.get() + 5,
+                minecraft.getWindow().getGuiScaledWidth() - fontRenderer.width(string) - xOffset - StructuresCompassConfig.xOffset.get() + 5,
                 yOffset + StructuresCompassConfig.yOffset.get() - 14, color
             );
     }
     
     public static void updateBuffer(@Nonnull BufferBuilder buffer, int startX, int startY, int endX, int endY) {
         buffer.begin(7, DefaultVertexFormats.POSITION);
-        buffer.pos(startX, endY, 0.0D).endVertex();
-        buffer.pos(endX, endY, 0.0D).endVertex();
-        buffer.pos(endX, startY, 0.0D).endVertex();
-        buffer.pos(startX, startY, 0.0D).endVertex();
+        buffer.vertex(startX, endY, 0.0D).endVertex();
+        buffer.vertex(endX, endY, 0.0D).endVertex();
+        buffer.vertex(endX, startY, 0.0D).endVertex();
+        buffer.vertex(startX, startY, 0.0D).endVertex();
     }
     
     @SuppressWarnings("deprecation")
@@ -78,7 +78,7 @@ public abstract class RenderUtils {
         final float alpha = (float) (color >> 24 & 255) / 255.0F;
         
         final Tessellator tessellator = Tessellator.getInstance();
-        final BufferBuilder buffer = tessellator.getBuffer();
+        final BufferBuilder buffer = tessellator.getBuilder();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
         RenderSystem.blendFuncSeparate(
@@ -92,7 +92,7 @@ public abstract class RenderUtils {
         RenderSystem.color4f(red, green, blue, alpha);
         
         updateBuffer(buffer, left, top, right, bottom);
-        tessellator.draw();
+        tessellator.end();
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }

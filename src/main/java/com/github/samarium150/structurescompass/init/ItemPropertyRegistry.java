@@ -24,7 +24,7 @@ public final class ItemPropertyRegistry {
      */
     @SubscribeEvent
     public static void register(@Nonnull final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> ItemModelsProperties.registerProperty(
+        event.enqueueWork(() -> ItemModelsProperties.register(
             ItemRegistry.STRUCTURES_COMPASS.get(),
             new ResourceLocation("angle"),
             new StructuresCompassItemPropertyGetter()

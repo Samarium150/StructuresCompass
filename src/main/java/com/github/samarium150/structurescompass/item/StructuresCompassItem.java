@@ -48,7 +48,7 @@ public final class StructuresCompassItem extends Item {
      * Initializer of the item
      */
     public StructuresCompassItem() {
-        super(new Item.Properties().group(ItemGroup.TOOLS).maxStackSize(1).rarity(Rarity.COMMON));
+        super(new Item.Properties().tab(ItemGroup.TAB_TOOLS).stacksTo(1).rarity(Rarity.COMMON));
     }
     
     /**
@@ -86,7 +86,7 @@ public final class StructuresCompassItem extends Item {
     public static void setPos(BlockPos pos, @Nonnull ItemStack stack) {
         CompoundNBT tag = ItemUtils.getOrCreateItemTag(stack);
         if (tag != null) {
-            tag.put(POS_TAG, LongNBT.valueOf(pos.toLong()));
+            tag.put(POS_TAG, LongNBT.valueOf(pos.asLong()));
             stack.setTag(tag);
         }
     }
@@ -100,7 +100,7 @@ public final class StructuresCompassItem extends Item {
     public static BlockPos getPos(@Nonnull ItemStack stack) {
         CompoundNBT tag = ItemUtils.getItemTag(stack);
         return (tag != null && tag.contains(POS_TAG, Constants.NBT.TAG_LONG)) ?
-                   BlockPos.fromLong(tag.getLong(POS_TAG)) : null;
+                   BlockPos.of(tag.getLong(POS_TAG)) : null;
     }
     
     /**
@@ -160,15 +160,15 @@ public final class StructuresCompassItem extends Item {
      * @param player PlayerEntity
      * @param structure Structure
      * @param stack ItemStack
-     * @see ServerWorld#getStructureLocation
+     * @see ServerWorld#findNearestMapFeature
      */
     public static void search(@Nonnull ServerWorld world, PlayerEntity player, @Nonnull Structure<?> structure, ItemStack stack) {
         ResourceLocation registry = structure.getRegistryName();
         assert registry != null;
         setStructureName(registry.toString(), stack);
         sendTranslatedMessage("string.structurescompass.msg_searching", player);
-        BlockPos pos = world.getStructureLocation(
-            structure, player.getPosition(), StructuresCompassConfig.radius.get(), isSkip(stack)
+        BlockPos pos = world.findNearestMapFeature(
+            structure, player.blockPosition(), StructuresCompassConfig.radius.get(), isSkip(stack)
         );
         sendTranslatedMessage("string.structurescompass.msg_done", player);
         if (pos == null) {
@@ -181,7 +181,7 @@ public final class StructuresCompassItem extends Item {
                 ItemUtils.removeTag(stack, DIM_TAG);
                 ItemUtils.removeTag(stack, POS_TAG);
             } else {
-                setDimension(world.getDimensionKey().getLocation().toString(), stack);
+                setDimension(world.dimension().location().toString(), stack);
                 setPos(pos, stack);
             }
         }
@@ -189,11 +189,11 @@ public final class StructuresCompassItem extends Item {
     
     @OnlyIn(Dist.CLIENT)
     private static void sendMessage(String msg, @Nonnull PlayerEntity entity) {
-        entity.sendMessage(new StringTextComponent(msg), entity.getUniqueID());
+        entity.sendMessage(new StringTextComponent(msg), entity.getUUID());
     }
     
     private static void sendTranslatedMessage(String translationKey, @Nonnull PlayerEntity entity) {
-        entity.sendMessage(new TranslationTextComponent(translationKey), entity.getUniqueID());
+        entity.sendMessage(new TranslationTextComponent(translationKey), entity.getUUID());
     }
     
     /**
@@ -210,30 +210,30 @@ public final class StructuresCompassItem extends Item {
      */
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(
+    public ActionResult<ItemStack> use(
         @Nonnull World world,
         @Nonnull PlayerEntity player,
         @Nonnull Hand hand
     ) {
-        ItemStack stack = player.getHeldItemMainhand();
-        if (world.isRemote)
+        ItemStack stack = player.getMainHandItem();
+        if (world.isClientSide)
             if (player.isCrouching())
                 StructuresCompassNetwork.channel.sendToServer(new RequestSyncPacket());
             else {
                 String name = getStructureName(stack);
                 if (name == null) {
-                    sendMessage(I18n.format("string.structurescompass.msg_no_target"), player);
-                    return super.onItemRightClick(world, player, hand);
+                    sendMessage(I18n.get("string.structurescompass.msg_no_target"), player);
+                    return super.use(world, player, hand);
                 }
-                Structure<?> structure = Structure.NAME_STRUCTURE_BIMAP.get(name.replace("minecraft:", ""));
+                Structure<?> structure = Structure.STRUCTURES_REGISTRY.get(name.replace("minecraft:", ""));
                 if (structure == null) {
-                    sendMessage(I18n.format("string.structurescompass.msg_error_name") + name, player);
-                    return super.onItemRightClick(world, player, hand);
+                    sendMessage(I18n.get("string.structurescompass.msg_error_name") + name, player);
+                    return super.use(world, player, hand);
                 }
                 StructuresCompassNetwork.channel.sendToServer(
                     new CompassSearchPacket(StructureUtils.getResourceForStructure(structure))
                 );
             }
-        return super.onItemRightClick(world, player, hand);
+        return super.use(world, player, hand);
     }
 }

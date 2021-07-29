@@ -101,7 +101,7 @@ public abstract class StructureUtils {
         if (split == -1) return resource;
         String source = resource.substring(0, split);
         String name = resource.substring(split + 1);
-        return I18n.format(String.format("structure.%s.%s", source, name));
+        return I18n.get(String.format("structure.%s.%s", source, name));
     }
     
     /**
@@ -125,9 +125,9 @@ public abstract class StructureUtils {
     public static List<String> getDimensions(@Nonnull ServerWorld world, Structure<?> structure) {
         final List<String> dims = new ArrayList<>();
         MinecraftServer server = world.getServer();
-        server.getWorlds().forEach(w->{
-            if (w.getChunkProvider().getChunkGenerator().getBiomeProvider().hasStructure(structure))
-                dims.add(w.getDimensionKey().getLocation().toString());
+        server.getAllLevels().forEach(w->{
+            if (w.getChunkSource().getGenerator().getBiomeSource().canGenerateStructure(structure))
+                dims.add(w.dimension().location().toString());
         });
         return dims;
     }
@@ -158,7 +158,7 @@ public abstract class StructureUtils {
         if (split == -1) return resource;
         String source = resource.substring(0, split);
         String name = resource.substring(split + 1);
-        return I18n.format(String.format("dimension.%s.%s", source, name));
+        return I18n.get(String.format("dimension.%s.%s", source, name));
     }
     
     /**
@@ -187,9 +187,9 @@ public abstract class StructureUtils {
      */
     @Nonnull
     public static Vector3d getDistance(@Nonnull BlockPos pos, @Nonnull Entity entity) {
-        double disX = (double) Math.round((pos.getX() - entity.getPosX()) * 100) / 100;
-        double disY = pos.getY() == 0 ? 0 : (double) Math.round((pos.getY() - entity.getPosY()) * 100) / 100;
-        double disZ = (double) Math.round((pos.getZ() - entity.getPosZ()) * 100) / 100;
+        double disX = (double) Math.round((pos.getX() - entity.getX()) * 100) / 100;
+        double disY = pos.getY() == 0 ? 0 : (double) Math.round((pos.getY() - entity.getY()) * 100) / 100;
+        double disZ = (double) Math.round((pos.getZ() - entity.getZ()) * 100) / 100;
         return new Vector3d(disX, disY, disZ);
     }
 }

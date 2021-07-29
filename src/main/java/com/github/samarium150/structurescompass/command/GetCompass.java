@@ -30,15 +30,15 @@ public final class GetCompass {
     
     private static int getTaggedCompass(@Nonnull CommandSource source, String feature) throws CommandSyntaxException {
         ItemStack structures_compass = new ItemStack(ItemRegistry.STRUCTURES_COMPASS.get());
-        giveItem(source.asPlayer(), StructuresCompassItem.setStructureName(feature, structures_compass));
+        giveItem(source.getPlayerOrException(), StructuresCompassItem.setStructureName(feature, structures_compass));
         return Command.SINGLE_SUCCESS;
     }
     
     private static void giveItem(@Nonnull ServerPlayerEntity player, ItemStack structures_compass) {
-        ItemEntity itemEntity = player.dropItem(structures_compass, false);
+        ItemEntity itemEntity = player.drop(structures_compass, false);
         if (itemEntity != null) {
-            itemEntity.setNoPickupDelay();
-            itemEntity.setOwnerId(player.getUniqueID());
+            itemEntity.setNoPickUpDelay();
+            itemEntity.setOwner(player.getUUID());
         }
     }
     
@@ -48,7 +48,7 @@ public final class GetCompass {
      */
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> structures_compass = Commands.literal("structures_compass")
-            .requires((commandSource) -> commandSource.hasPermissionLevel(2));
+            .requires((commandSource) -> commandSource.hasPermission(2));
 
         for (Structure<?> structureFeature : ForgeRegistries.STRUCTURE_FEATURES) {
             ResourceLocation res = structureFeature.getRegistryName();

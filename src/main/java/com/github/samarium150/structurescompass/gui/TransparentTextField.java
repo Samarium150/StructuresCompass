@@ -50,17 +50,17 @@ public class TransparentTextField extends TextFieldWidget {
     
     @Override
     public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        if (getVisible()) {
+        if (isVisible()) {
             if (pseudoEnableBackgroundDrawing) {
                 final int color = (int) (255.0F * 1.7F);
                 RenderUtils.drawRect(x, y, x + width, y + height, color / 2 << 24);
             }
-            boolean showLabel = !isFocused() && getText().isEmpty();
+            boolean showLabel = !isFocused() && getValue().isEmpty();
             int i = showLabel ? labelColor : (pseudoIsEnabled ? pseudoEnabledColor : pseudoDisabledColor);
             int j = getCursorPosition() - pseudoLineScrollOffset;
             int k = pseudoSelectionEnd - pseudoLineScrollOffset;
-            String text = showLabel ? label.getString() : getText();
-            String s = fontRenderer.trimStringToWidth(text.substring(pseudoLineScrollOffset), getWidth());
+            String text = showLabel ? label.getString() : getValue();
+            String s = fontRenderer.plainSubstrByWidth(text.substring(pseudoLineScrollOffset), getWidth());
             boolean flag = j >= 0 && j <= s.length();
             boolean flag1 = isFocused() && pseudoCursorCounter / 6 % 2 == 0 && flag;
             int l = pseudoEnableBackgroundDrawing ? x + 4 : x;
@@ -73,10 +73,10 @@ public class TransparentTextField extends TextFieldWidget {
             
             if (!s.isEmpty()) {
                 String s1 = flag ? s.substring(0, j) : s;
-                j1 = fontRenderer.drawStringWithShadow(matrixStack, s1, (float) l, (float) i1, i);
+                j1 = fontRenderer.drawShadow(matrixStack, s1, (float) l, (float) i1, i);
             }
             
-            boolean flag2 = getCursorPosition() < getText().length() || getText().length() >= pseudoMaxStringLength;
+            boolean flag2 = getCursorPosition() < getValue().length() || getValue().length() >= pseudoMaxStringLength;
             int k1 = j1;
             
             if (!flag) {
@@ -87,27 +87,27 @@ public class TransparentTextField extends TextFieldWidget {
             }
             
             if (!s.isEmpty() && flag && j < s.length()) {
-                fontRenderer.drawStringWithShadow(matrixStack, s.substring(j), (float) j1, (float) i1, i);
+                fontRenderer.drawShadow(matrixStack, s.substring(j), (float) j1, (float) i1, i);
             }
             
             if (flag1) {
                 if (flag2) {
-                    RenderUtils.drawRect(k1, i1 - 1, k1 + 1, i1 + 1 + fontRenderer.FONT_HEIGHT, -3092272);
+                    RenderUtils.drawRect(k1, i1 - 1, k1 + 1, i1 + 1 + fontRenderer.lineHeight, -3092272);
                 } else {
-                    fontRenderer.drawStringWithShadow(matrixStack, "_", (float) k1, (float) i1, i);
+                    fontRenderer.drawShadow(matrixStack, "_", (float) k1, (float) i1, i);
                 }
             }
             
             if (k != j) {
-                int l1 = l + fontRenderer.getStringWidth(s.substring(0, k));
-                drawSelectionBox(k1, i1 - 1, l1 - 1, i1 + 1 + fontRenderer.FONT_HEIGHT);
+                int l1 = l + fontRenderer.width(s.substring(0, k));
+                drawSelectionBox(k1, i1 - 1, l1 - 1, i1 + 1 + fontRenderer.lineHeight);
             }
         }
     }
     
     @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
+    public void setEditable(boolean enabled) {
+        super.setEditable(enabled);
         pseudoIsEnabled = enabled;
     }
     
@@ -118,8 +118,8 @@ public class TransparentTextField extends TextFieldWidget {
     }
     
     @Override
-    public void setDisabledTextColour(int color) {
-        super.setDisabledTextColour(color);
+    public void setTextColorUneditable(int color) {
+        super.setTextColorUneditable(color);
         pseudoDisabledColor = color;
     }
     
@@ -132,14 +132,14 @@ public class TransparentTextField extends TextFieldWidget {
     }
     
     @Override
-    public void setEnableBackgroundDrawing(boolean enableBackgroundDrawing) {
-        super.setEnableBackgroundDrawing(enableBackgroundDrawing);
+    public void setBordered(boolean enableBackgroundDrawing) {
+        super.setBordered(enableBackgroundDrawing);
         pseudoEnableBackgroundDrawing = enableBackgroundDrawing;
     }
     
     @Override
-    public void setMaxStringLength(int length) {
-        super.setMaxStringLength(length);
+    public void setMaxLength(int length) {
+        super.setMaxLength(length);
         pseudoMaxStringLength = length;
     }
     
@@ -150,20 +150,20 @@ public class TransparentTextField extends TextFieldWidget {
     }
     
     @Override
-    public void setSelectionPos(int position) {
-        super.setSelectionPos(position);
-        int i = getText().length();
+    public void setHighlightPos(int position) {
+        super.setHighlightPos(position);
+        int i = getValue().length();
         pseudoSelectionEnd = MathHelper.clamp(position, 0, i);
         if (fontRenderer != null) {
             if (pseudoLineScrollOffset > i) {
                 pseudoLineScrollOffset = i;
             }
             
-            int j = getAdjustedWidth();
-            String s = fontRenderer.getLineScrollOffset(getText().substring(this.pseudoLineScrollOffset), j, false);
+            int j = getInnerWidth();
+            String s = fontRenderer.plainSubstrByWidth(getValue().substring(this.pseudoLineScrollOffset), j, false);
             int k = s.length() + pseudoLineScrollOffset;
             if (pseudoSelectionEnd == pseudoLineScrollOffset) {
-                pseudoLineScrollOffset -= fontRenderer.getLineScrollOffset(getText(), j, true).length();
+                pseudoLineScrollOffset -= fontRenderer.plainSubstrByWidth(getValue(), j, true).length();
             }
             
             if (pseudoSelectionEnd > k) {
@@ -195,7 +195,7 @@ public class TransparentTextField extends TextFieldWidget {
         if (startX > x + width)
             startX = x + width;
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
+        BufferBuilder buffer = tessellator.getBuilder();
     
         // Annotated as deprecated but no replacement
         RenderSystem.color4f(0.0F, 0.0F, 255.0F, 255.0F);
@@ -204,7 +204,7 @@ public class TransparentTextField extends TextFieldWidget {
         RenderSystem.enableColorLogicOp();
         RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
         RenderUtils.updateBuffer(buffer, startX, startY, endX, endY);
-        tessellator.draw();
+        tessellator.end();
         RenderSystem.disableColorLogicOp();
         RenderSystem.enableTexture();
     }

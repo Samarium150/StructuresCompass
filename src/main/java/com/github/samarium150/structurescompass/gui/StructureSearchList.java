@@ -80,7 +80,7 @@ public final class StructureSearchList extends ExtendedList<StructureSearchEntry
     
     @Override
     protected boolean isSelectedItem(int index) {
-        return index >= 0 && index < getEventListeners().size() && getEventListeners().get(index).equals(getSelected());
+        return index >= 0 && index < children().size() && children().get(index).equals(getSelected());
     }
     
     @Override

@@ -24,10 +24,10 @@ public final class ClientEventHandler {
     public static void onRenderOverlay(@Nonnull final RenderGameOverlayEvent event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
 
-        if (minecraft.world == null ||
+        if (minecraft.level == null ||
                 minecraft.player == null ||
-                minecraft.player.getHeldItemMainhand().getItem() != ItemRegistry.STRUCTURES_COMPASS.get() ||
-                minecraft.gameSettings.hideGUI)
+                minecraft.player.getMainHandItem().getItem() != ItemRegistry.STRUCTURES_COMPASS.get() ||
+                minecraft.options.hideGui)
             return;
 
         new StructuresCompassHUD(event.getMatrixStack()).render();

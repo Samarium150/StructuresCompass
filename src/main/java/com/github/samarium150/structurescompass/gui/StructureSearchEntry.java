@@ -43,7 +43,7 @@ public final class StructureSearchEntry extends AbstractListEntry<StructureSearc
     }
     
     public void search() {
-        minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         screen.search(structure);
     }
 
@@ -58,19 +58,19 @@ public final class StructureSearchEntry extends AbstractListEntry<StructureSearc
         int index, int top, int left, int width, int height, int mouseX, int mouseY,
         boolean isMouseOver, float partialTicks
     ) {
-        minecraft.fontRenderer.drawString(matrixStack,
+        minecraft.font.draw(matrixStack,
             StructureUtils.getLocalizedStructureName(structure),
             left + 1, top + 1, 0xffffff
         );
-        minecraft.fontRenderer.drawText(matrixStack,
-            new StringTextComponent(I18n.format("string.structurescompass.source") + ": "
+        minecraft.font.draw(matrixStack,
+            new StringTextComponent(I18n.get("string.structurescompass.source") + ": "
                                         + StructureUtils.getStructureSource(structure)),
-            left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 3, 0x808080
+            left + 1, top + minecraft.font.lineHeight + 3, 0x808080
         );
-        minecraft.fontRenderer.drawText(matrixStack,
-            new StringTextComponent(I18n.format("string.structurescompass.dimension") + ": "
+        minecraft.font.draw(matrixStack,
+            new StringTextComponent(I18n.get("string.structurescompass.dimension") + ": "
                                         + StructureUtils.getDimensions(structure)),
-            left + 1, top + minecraft.fontRenderer.FONT_HEIGHT + 14, 0x808080
+            left + 1, top + minecraft.font.lineHeight + 14, 0x808080
         );
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
@@ -79,11 +79,11 @@ public final class StructureSearchEntry extends AbstractListEntry<StructureSearc
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
             list.selectStructure(this);
-            if (Util.milliTime() - lastTickTime < 250L) {
+            if (Util.getMillis() - lastTickTime < 250L) {
                 search();
                 return true;
             }
-            lastTickTime = Util.milliTime();
+            lastTickTime = Util.getMillis();
         }
         return false;
     }

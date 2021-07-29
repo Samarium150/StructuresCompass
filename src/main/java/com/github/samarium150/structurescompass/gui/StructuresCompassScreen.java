@@ -71,12 +71,12 @@ public final class StructuresCompassScreen extends Screen {
         sortByButton = addButton(new TransparentButton(
             10, 65, 110, 20,
             new StringTextComponent(
-                I18n.format("string.structurescompass.sort_by") + ": " + category.getLocalizedName()
+                I18n.get("string.structurescompass.sort_by") + ": " + category.getLocalizedName()
             ),
             (onPress) -> {
                 category = category.next();
                 sortByButton.setMessage(new StringTextComponent(
-                    I18n.format("string.structurescompass.sort_by") + ": " + category.getLocalizedName())
+                    I18n.get("string.structurescompass.sort_by") + ": " + category.getLocalizedName())
                 );
                 selectionList.refresh();
                 restoreSelected();
@@ -85,12 +85,12 @@ public final class StructuresCompassScreen extends Screen {
         skipExistingChunksButton = addButton(new TransparentButton(
             10, 90, 110, 20,
             new StringTextComponent(
-                I18n.format("string.structurescompass.skip_existing_chunks") + ": " + skip
+                I18n.get("string.structurescompass.skip_existing_chunks") + ": " + skip
             ),
             (onPress) -> {
                 skip = !skip;
                 skipExistingChunksButton.setMessage(new StringTextComponent(
-                    I18n.format("string.structurescompass.skip_existing_chunks") + ": " + skip)
+                    I18n.get("string.structurescompass.skip_existing_chunks") + ": " + skip)
                 );
             }
         ));
@@ -99,7 +99,7 @@ public final class StructuresCompassScreen extends Screen {
             new TranslationTextComponent("gui.cancel"),
             (onPress) -> {
                 assert minecraft != null;
-                minecraft.displayGuiScreen(null);
+                minecraft.setScreen(null);
             }
         ));
         searchTextField = new TransparentTextField(
@@ -125,26 +125,26 @@ public final class StructuresCompassScreen extends Screen {
         assert minecraft != null;
         StructuresCompassNetwork.channel.sendToServer(new CompassSkipExistingChunksPacket(skip));
         StructuresCompassNetwork.channel.sendToServer(new CompassSearchPacket(structure.getRegistryName()));
-        minecraft.displayGuiScreen(null);
+        minecraft.setScreen(null);
     }
     
     public void processSearchTerm() {
         structuresMatchingSearch = new ArrayList<>();
         for (Structure<?> structure : allowedStructures) {
             String temp = "";
-            if (!searchTextField.getText().isEmpty() && searchTextField.getText().charAt(0) == '#')
+            if (!searchTextField.getValue().isEmpty() && searchTextField.getValue().charAt(0) == '#')
                 temp = StructureUtils.getDimensions(structure);
-            if ((!searchTextField.getText().isEmpty() &&
+            if ((!searchTextField.getValue().isEmpty() &&
                     //source search
-                    (searchTextField.getText().charAt(0) == '@' &&
+                    (searchTextField.getValue().charAt(0) == '@' &&
                         StructureUtils.getStructureSource(structure).toLowerCase()
-                            .contains(searchTextField.getText().substring(1).toLowerCase())) ||
+                            .contains(searchTextField.getValue().substring(1).toLowerCase())) ||
                     //dim search
                     (!temp.isEmpty() && temp.toLowerCase()
-                            .contains(searchTextField.getText().substring(1).toLowerCase()))) ||
+                            .contains(searchTextField.getValue().substring(1).toLowerCase()))) ||
                 //normal search
                 (StructureUtils.getLocalizedStructureName(structure).toLowerCase()
-                    .contains(searchTextField.getText().toLowerCase()))) {
+                    .contains(searchTextField.getValue().toLowerCase()))) {
                 structuresMatchingSearch.add(structure);
             }
         }
@@ -161,7 +161,7 @@ public final class StructuresCompassScreen extends Screen {
     @Override
     protected void init() {
         assert minecraft != null;
-        minecraft.keyboardListener.enableRepeatEvents(true);
+        minecraft.keyboardHandler.setSendRepeatsToGui(true);
         setup();
         if (selectionList == null)
             selectionList = new StructureSearchList(this, minecraft,
@@ -186,7 +186,7 @@ public final class StructuresCompassScreen extends Screen {
         renderBackground(matrixStack);
         selectionList.render(matrixStack, mouseX, mouseY, partialTicks);
         searchTextField.render(matrixStack, mouseX, mouseY, partialTicks);
-        drawCenteredString(matrixStack, font, I18n.format("string.structurescompass.select_structure"), 65, 15, 0xffffff);
+        drawCenteredString(matrixStack, font, I18n.get("string.structurescompass.select_structure"), 65, 15, 0xffffff);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
     
@@ -221,9 +221,9 @@ public final class StructuresCompassScreen extends Screen {
     }
     
     @Override
-    public void onClose() {
-        super.onClose();
+    public void removed() {
+        super.removed();
         assert minecraft != null;
-        minecraft.keyboardListener.enableRepeatEvents(false);
+        minecraft.keyboardHandler.setSendRepeatsToGui(false);
     }
 }

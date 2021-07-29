@@ -48,7 +48,7 @@ public final class CompassSearchPacket implements Packet {
             ServerPlayerEntity player = context.getSender();
             final ItemStack stack = ItemUtils.getHeldStructuresCompass(player);
             if (!stack.isEmpty() && player != null) {
-                final ServerWorld world = (ServerWorld)player.world;
+                final ServerWorld world = (ServerWorld)player.level;
                 Structure<?> structure = StructureUtils.getStructureForResource(resource);
                 if (structure != null)
                     new Thread(() -> StructuresCompassItem.search(world, player, structure, stack)).start();

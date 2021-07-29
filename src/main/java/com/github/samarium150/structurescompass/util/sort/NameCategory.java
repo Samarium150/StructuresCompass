@@ -28,6 +28,6 @@ public final class NameCategory implements Category {
     @Nonnull
     @Override
     public String getLocalizedName() {
-        return I18n.format("string.structurescompass.name");
+        return I18n.get("string.structurescompass.name");
     }
 }

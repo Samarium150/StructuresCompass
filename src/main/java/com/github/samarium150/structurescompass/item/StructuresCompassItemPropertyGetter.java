@@ -54,21 +54,21 @@ public final class StructuresCompassItemPropertyGetter implements IItemPropertyG
     private final Angle r2 = new Angle();
     
     private double getFrameRotation(@Nonnull ItemFrameEntity frameEntity) {
-        Direction direction = frameEntity.getHorizontalFacing();
-        int i = direction.getAxis().isVertical() ? 90 * direction.getAxisDirection().getOffset() : 0;
-        return MathHelper.wrapDegrees(180 + direction.getHorizontalIndex() * 90 + frameEntity.getRotation() * 45 + i);
+        Direction direction = frameEntity.getDirection();
+        int i = direction.getAxis().isVertical() ? 90 * direction.getAxisDirection().getStep() : 0;
+        return MathHelper.wrapDegrees(180 + direction.get2DDataValue() * 90 + frameEntity.getRotation() * 45 + i);
     }
     
     private static boolean closeEnough(@Nonnull Entity entity, @Nonnull BlockPos pos) {
-        return entity.getPositionVec().squareDistanceTo(
+        return entity.position().distanceToSqr(
             (double)pos.getX() + 0.5D,
-            entity.getPositionVec().getY(),
+            entity.position().y(),
             (double)pos.getZ() + 0.5D
         ) < (double)1.0E-5F;
     }
     
     private static double getAngle(@Nonnull Vector3d vector, @Nonnull Entity entity) {
-        return Math.atan2(vector.getZ() - entity.getPosZ(), vector.getX() - entity.getPosX());
+        return Math.atan2(vector.z() - entity.getZ(), vector.x() - entity.getX());
     }
     
     /**
@@ -83,29 +83,29 @@ public final class StructuresCompassItemPropertyGetter implements IItemPropertyG
      */
     @Override
     public float call(@Nonnull ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity livingEntity) {
-        Entity entity = livingEntity != null ? livingEntity : stack.getAttachedEntity();
+        Entity entity = livingEntity != null ? livingEntity : stack.getEntityRepresentation();
         if (entity == null) return 0F;
-        if (world == null && entity.world instanceof ClientWorld)
-            world = (ClientWorld) entity.world;
+        if (world == null && entity.level instanceof ClientWorld)
+            world = (ClientWorld) entity.level;
         if (world == null) return 0F;
         BlockPos pos = StructuresCompassItem.getPos(stack);
         if (pos != null
-                && world.getDimensionKey().getLocation().toString().equals(StructuresCompassItem.getDimension(stack))
+                && world.dimension().location().toString().equals(StructuresCompassItem.getDimension(stack))
                 && !closeEnough(entity, pos)) {
-            boolean flag = entity instanceof PlayerEntity && ((PlayerEntity)entity).isUser();
+            boolean flag = entity instanceof PlayerEntity && ((PlayerEntity)entity).isLocalPlayer();
             double d1 = 0.0D;
             if (flag) {
-                d1 = entity.rotationYaw;
+                d1 = entity.yRot;
             } else if (entity instanceof ItemFrameEntity) {
                 d1 = this.getFrameRotation((ItemFrameEntity)entity);
             } else if (entity instanceof ItemEntity) {
-                d1 = (180.0F - ((ItemEntity)entity).getItemHover(0.5F) / ((float)Math.PI * 2F) * 360.0F);
+                d1 = (180.0F - ((ItemEntity)entity).getSpin(0.5F) / ((float)Math.PI * 2F) * 360.0F);
             } else if (livingEntity != null) {
-                d1 = livingEntity.renderYawOffset;
+                d1 = livingEntity.yBodyRot;
             }
     
             d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
-            double d2 = getAngle(Vector3d.copyCentered(pos), entity) / (double)((float)Math.PI * 2F);
+            double d2 = getAngle(Vector3d.atCenterOf(pos), entity) / (double)((float)Math.PI * 2F);
             double d3 = (flag) ? d2 + r1.wobble(world, 0.5D - (d1 - 0.25D)) : 0.5D - (d1 - 0.25D - d2);
             return MathHelper.positiveModulo((float)d3, 1.0F);
         }

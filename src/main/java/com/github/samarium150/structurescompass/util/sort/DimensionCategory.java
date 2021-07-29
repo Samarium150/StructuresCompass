@@ -28,6 +28,6 @@ public final class DimensionCategory implements Category {
     @Nonnull
     @Override
     public String getLocalizedName() {
-        return I18n.format("string.structurescompass.dimension");
+        return I18n.get("string.structurescompass.dimension");
     }
 }

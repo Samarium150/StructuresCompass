@@ -46,7 +46,7 @@ public final class SyncPacket implements Packet, Serializer<HashMap<String, List
      * @param buffer PacketBuffer
      */
     public SyncPacket(@Nonnull PacketBuffer buffer) {
-        stack = buffer.readItemStack();
+        stack = buffer.readItem();
         allowed = new ArrayList<>();
         int size = buffer.readInt();
         for (int i = 0; i < size; ++i)
@@ -55,7 +55,7 @@ public final class SyncPacket implements Packet, Serializer<HashMap<String, List
         size = buffer.readInt();
         StringBuilder serialized = new StringBuilder();
         try {
-            for (int i = 0; i < size; ++i) serialized.append(buffer.readString());
+            for (int i = 0; i < size; ++i) serialized.append(buffer.readUtf());
             temp = this.deserialize(serialized.toString());
             temp.replaceAll((k, v) -> v.stream().map(StructureUtils::getLocalizedDimensionName).collect(Collectors.toList()));
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public final class SyncPacket implements Packet, Serializer<HashMap<String, List
     
     @Override
     public void toBytes(@Nonnull PacketBuffer buffer) {
-        buffer.writeItemStack(stack);
+        buffer.writeItem(stack);
         buffer.writeInt(allowed.size());
         allowed.forEach(structure -> buffer.writeResourceLocation(StructureUtils.getResourceForStructure(structure)));
         String serialized;
@@ -81,7 +81,7 @@ public final class SyncPacket implements Packet, Serializer<HashMap<String, List
         int size = ret.size();
         buffer.writeInt(size);
         for (String s : ret)
-            buffer.writeString(s);
+            buffer.writeUtf(s);
     }
     
     @Override

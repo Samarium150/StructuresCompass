@@ -74,10 +74,10 @@ public abstract class ItemUtils {
      */
     public static ItemStack getHeldItem(PlayerEntity player, Item item) {
         if (player == null) return ItemStack.EMPTY;
-        if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() == item)
-            return player.getHeldItemMainhand();
-        else if (!player.getHeldItemOffhand().isEmpty() && player.getHeldItemOffhand().getItem() == item)
-            return player.getHeldItemOffhand();
+        if (!player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() == item)
+            return player.getMainHandItem();
+        else if (!player.getOffhandItem().isEmpty() && player.getOffhandItem().getItem() == item)
+            return player.getOffhandItem();
         return ItemStack.EMPTY;
     }
     

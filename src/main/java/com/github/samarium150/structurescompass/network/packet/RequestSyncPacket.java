@@ -44,7 +44,7 @@ public final class RequestSyncPacket implements Packet {
                 final HashMap<String, List<String>> map = new HashMap<>();
                 allowed.forEach(structure -> map.put(
                     StructureUtils.getStructureName(structure),
-                    StructureUtils.getDimensions(player.getServerWorld(), structure)
+                    StructureUtils.getDimensions(player.getLevel(), structure)
                 ));
                 StructuresCompassNetwork.channel.send(
                     PacketDistributor.PLAYER.with(() -> player),

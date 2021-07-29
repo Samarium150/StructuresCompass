@@ -46,9 +46,9 @@ public class TransparentButton extends Button {
         @Nonnull MatrixStack matrixStack, @Nonnull FontRenderer fontRenderer, @Nonnull ITextComponent text,
         int x, int y, int color
     ) {
-        fontRenderer.drawText(
+        fontRenderer.draw(
             matrixStack, text,
-            (float)(x - fontRenderer.func_243245_a(text.func_241878_f()) / 2), (float)y, color
+            (float)(x - fontRenderer.width(text.getVisualOrderText()) / 2), (float)y, color
         );
     }
     
@@ -62,7 +62,7 @@ public class TransparentButton extends Button {
         
             RenderUtils.drawRect(x, y, x + width, y + height, color / 2 << 24);
             TransparentButton.drawCenteredString(
-                matrixStack, minecraft.fontRenderer, getMessage(),
+                matrixStack, minecraft.font, getMessage(),
                 x + width / 2, y + (height - 8) / 2, 0xffffff
             );
         }
