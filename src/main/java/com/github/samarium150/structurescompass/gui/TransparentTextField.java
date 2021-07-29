@@ -2,15 +2,15 @@ package com.github.samarium150.structurescompass.gui;
 
 import com.github.samarium150.structurescompass.util.GeneralUtils;
 import com.github.samarium150.structurescompass.util.RenderUtils;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.EditBox;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,10 +27,10 @@ import javax.annotation.Nonnull;
  * </a>.
  */
 @OnlyIn(Dist.CLIENT)
-public class TransparentTextField extends TextFieldWidget {
+public class TransparentTextField extends EditBox {
     
-    private final FontRenderer fontRenderer;
-    private ITextComponent label;
+    private final Font fontRenderer;
+    private Component label;
     private int labelColor = 0x808080;
     
     private boolean pseudoIsEnabled = true;
@@ -42,14 +42,14 @@ public class TransparentTextField extends TextFieldWidget {
     private int pseudoCursorCounter;
     private int pseudoSelectionEnd;
     
-    public TransparentTextField(FontRenderer fontRenderer, int x, int y, int width, int height, ITextComponent label) {
+    public TransparentTextField(Font fontRenderer, int x, int y, int width, int height, Component label) {
         super(fontRenderer, x, y, width, height, label);
         this.fontRenderer = fontRenderer;
         this.label = label;
     }
     
     @Override
-    public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (isVisible()) {
             if (pseudoEnableBackgroundDrawing) {
                 final int color = (int) (255.0F * 1.7F);
@@ -153,7 +153,7 @@ public class TransparentTextField extends TextFieldWidget {
     public void setHighlightPos(int position) {
         super.setHighlightPos(position);
         int i = getValue().length();
-        pseudoSelectionEnd = MathHelper.clamp(position, 0, i);
+        pseudoSelectionEnd = Mth.clamp(position, 0, i);
         if (fontRenderer != null) {
             if (pseudoLineScrollOffset > i) {
                 pseudoLineScrollOffset = i;
@@ -172,19 +172,18 @@ public class TransparentTextField extends TextFieldWidget {
                 pseudoLineScrollOffset -= pseudoLineScrollOffset - pseudoSelectionEnd;
             }
             
-            pseudoLineScrollOffset = MathHelper.clamp(pseudoLineScrollOffset, 0, i);
+            pseudoLineScrollOffset = Mth.clamp(pseudoLineScrollOffset, 0, i);
         }
     }
     
-    public void setLabel(ITextComponent label) {
+    public void setLabel(Component label) {
         this.label = label;
     }
     
     public void setLabelColor(int labelColor) {
         this.labelColor = labelColor;
     }
-    
-    @SuppressWarnings("deprecation")
+
     private void drawSelectionBox(int startX, int startY, int endX, int endY) {
         if (startX < endX)
             startX = GeneralUtils.swap(endX, endX = startX);
@@ -194,17 +193,16 @@ public class TransparentTextField extends TextFieldWidget {
             endX = x + width;
         if (startX > x + width)
             startX = x + width;
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuilder();
-    
-        // Annotated as deprecated but no replacement
-        RenderSystem.color4f(0.0F, 0.0F, 255.0F, 255.0F);
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder buffer = tesselator.getBuilder();
+        
+        RenderSystem.setShaderColor(0.0F, 0.0F, 255.0F, 255.0F);
         
         RenderSystem.disableTexture();
         RenderSystem.enableColorLogicOp();
         RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
         RenderUtils.updateBuffer(buffer, startX, startY, endX, endY);
-        tessellator.end();
+        tesselator.end();
         RenderSystem.disableColorLogicOp();
         RenderSystem.enableTexture();
     }

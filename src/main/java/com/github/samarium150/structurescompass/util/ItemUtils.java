@@ -1,10 +1,10 @@
 package com.github.samarium150.structurescompass.util;
 
 import com.github.samarium150.structurescompass.init.ItemRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,10 +33,10 @@ public abstract class ItemUtils {
      *         <code>null</code> otherwise
      */
     @Nullable
-    public static CompoundNBT getOrCreateItemTag(@Nonnull ItemStack stack) {
+    public static CompoundTag getOrCreateItemTag(@Nonnull ItemStack stack) {
         if (isStackItemStructuresCompass(stack)) {
-            CompoundNBT tag = stack.getTag();
-            return (tag == null) ? new CompoundNBT() : tag;
+            CompoundTag tag = stack.getTag();
+            return (tag == null) ? new CompoundTag() : tag;
         }
         return null;
     }
@@ -48,7 +48,7 @@ public abstract class ItemUtils {
      *         <code>null</code> otherwise
      */
     @Nullable
-    public static CompoundNBT getItemTag(@Nonnull ItemStack stack) {
+    public static CompoundTag getItemTag(@Nonnull ItemStack stack) {
         return isStackItemStructuresCompass(stack) ? stack.getTag() : null;
     }
     
@@ -59,7 +59,7 @@ public abstract class ItemUtils {
      */
     public static void removeTag(@Nonnull ItemStack stack, String TAG_NAME) {
         if (stack.getItem() == ItemRegistry.STRUCTURES_COMPASS.get()) {
-            CompoundNBT tag = stack.getTag();
+            CompoundTag tag = stack.getTag();
             if (tag == null) return;
             tag.remove(TAG_NAME);
             stack.setTag(tag);
@@ -72,7 +72,7 @@ public abstract class ItemUtils {
      * @param item the item to get
      * @return the ItemStack of the given item
      */
-    public static ItemStack getHeldItem(PlayerEntity player, Item item) {
+    public static ItemStack getHeldItem(Player player, Item item) {
         if (player == null) return ItemStack.EMPTY;
         if (!player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() == item)
             return player.getMainHandItem();
@@ -86,7 +86,7 @@ public abstract class ItemUtils {
      * @param player the player entity
      * @return the ItemStack of the compass
      */
-    public static ItemStack getHeldStructuresCompass(PlayerEntity player) {
+    public static ItemStack getHeldStructuresCompass(Player player) {
         return getHeldItem(player, ItemRegistry.STRUCTURES_COMPASS.get());
     }
 }

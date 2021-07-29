@@ -1,8 +1,8 @@
 package com.github.samarium150.structurescompass.init;
 
-import com.github.samarium150.structurescompass.item.StructuresCompassItemPropertyGetter;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.util.ResourceLocation;
+import com.github.samarium150.structurescompass.item.StructuresCompassItemProperty;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,10 +24,10 @@ public final class ItemPropertyRegistry {
      */
     @SubscribeEvent
     public static void register(@Nonnull final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> ItemModelsProperties.register(
+        event.enqueueWork(() -> ItemProperties.register(
             ItemRegistry.STRUCTURES_COMPASS.get(),
             new ResourceLocation("angle"),
-            new StructuresCompassItemPropertyGetter()
+            new StructuresCompassItemProperty()
         ));
     }
 }

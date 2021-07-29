@@ -18,12 +18,12 @@ apply plugin: 'net.minecraftforge.gradle'
 
 def previousVersion = '1.2.0'
 def baseVersion = '1.2.1'
-def minecraftVersion = '1.16.5'
+def minecraftVersion = '1.17.1'
 version = "${minecraftVersion}-${baseVersion}" as Object
 group = 'com.github.samarium150'
 archivesBaseName = 'structurescompass'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 logger.quiet('Java: {} JVM: {}({}) Arch: {}',
     System.getProperty('java.version'),
@@ -42,7 +42,7 @@ sourceSets {
 def mainSourceSet = sourceSets.main
 
 minecraft {
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'official', version: minecraftVersion
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
@@ -73,7 +73,7 @@ minecraft {
 // sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.2'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.13'
 }
 
 compileJava {

@@ -1,8 +1,8 @@
 package com.github.samarium150.structurescompass.util.sort;
 
 import com.github.samarium150.structurescompass.util.StructureUtils;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 public final class NameCategory implements Category {
     
     @Override
-    public int compare(Structure<?> s1, Structure<?> s2) {
+    public int compare(StructureFeature<?> s1, StructureFeature<?> s2) {
         return StructureUtils.getLocalizedStructureName(s1).compareTo(StructureUtils.getLocalizedStructureName(s2));
     }
     

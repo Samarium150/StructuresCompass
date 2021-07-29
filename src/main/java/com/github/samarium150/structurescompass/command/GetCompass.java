@@ -6,13 +6,13 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -28,13 +28,13 @@ public final class GetCompass {
     
     private GetCompass() { }
     
-    private static int getTaggedCompass(@Nonnull CommandSource source, String feature) throws CommandSyntaxException {
+    private static int getTaggedCompass(@Nonnull CommandSourceStack source, String feature) throws CommandSyntaxException {
         ItemStack structures_compass = new ItemStack(ItemRegistry.STRUCTURES_COMPASS.get());
         giveItem(source.getPlayerOrException(), StructuresCompassItem.setStructureName(feature, structures_compass));
         return Command.SINGLE_SUCCESS;
     }
     
-    private static void giveItem(@Nonnull ServerPlayerEntity player, ItemStack structures_compass) {
+    private static void giveItem(@Nonnull ServerPlayer player, ItemStack structures_compass) {
         ItemEntity itemEntity = player.drop(structures_compass, false);
         if (itemEntity != null) {
             itemEntity.setNoPickUpDelay();
@@ -46,11 +46,11 @@ public final class GetCompass {
      * Register this command
      * @param dispatcher CommandDispatcher
      */
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> structures_compass = Commands.literal("structures_compass")
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        LiteralArgumentBuilder<CommandSourceStack> structures_compass = Commands.literal("structures_compass")
             .requires((commandSource) -> commandSource.hasPermission(2));
 
-        for (Structure<?> structureFeature : ForgeRegistries.STRUCTURE_FEATURES) {
+        for (StructureFeature<?> structureFeature : ForgeRegistries.STRUCTURE_FEATURES) {
             ResourceLocation res = structureFeature.getRegistryName();
             if (res == null) continue;
             String structure = res.toString();

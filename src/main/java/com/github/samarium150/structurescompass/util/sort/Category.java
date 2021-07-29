@@ -1,6 +1,6 @@
 package com.github.samarium150.structurescompass.util.sort;
 
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -11,7 +11,7 @@ import java.util.Comparator;
  * The interface for sorting structures in GUI
  */
 @OnlyIn(Dist.CLIENT)
-public interface Category extends Comparator<Structure<?>> {
+public interface Category extends Comparator<StructureFeature<?>> {
     
     /**
      * The comparison function for structures
@@ -21,7 +21,7 @@ public interface Category extends Comparator<Structure<?>> {
      * @return order of the two structures
      */
     @Override
-    int compare(Structure<?> s1, Structure<?> s2);
+    int compare(StructureFeature<?> s1, StructureFeature<?> s2);
     
     /**
      * @return the next Category after clicking

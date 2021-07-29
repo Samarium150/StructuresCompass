@@ -1,17 +1,17 @@
 package com.github.samarium150.structurescompass.item;
 
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -20,10 +20,10 @@ import javax.annotation.Nullable;
 
 /**
  * Class for setting the property of the compass' model
- * @see net.minecraft.item.ItemModelsProperties
+ * @see net.minecraft.client.renderer.item.ItemProperties
  */
 @OnlyIn(Dist.CLIENT)
-public final class StructuresCompassItemPropertyGetter implements IItemPropertyGetter {
+public final class StructuresCompassItemProperty implements ClampedItemPropertyFunction {
     
     private static class Angle {
         
@@ -37,14 +37,14 @@ public final class StructuresCompassItemPropertyGetter implements IItemPropertyG
             return this.lastUpdateTick != lastUpdateTick;
         }
         
-        private double wobble(ClientWorld world, double amount) {
+        private double wobble(ClientLevel world, double amount) {
             if (world != null && isOutdated(world.getGameTime())) {
                 lastUpdateTick = world.getGameTime();
                 double d0 = amount - rotation;
-                d0 = MathHelper.positiveModulo(d0 + 0.5D, 1.0D) - 0.5D;
+                d0 = Mth.positiveModulo(d0 + 0.5D, 1.0D) - 0.5D;
                 delta += d0 * 0.1D;
                 delta *= 0.8D;
-                rotation = MathHelper.positiveModulo(rotation + delta, 1.0D);
+                rotation = Mth.positiveModulo(rotation + delta, 1.0D);
             }
             return rotation;
         }
@@ -53,10 +53,10 @@ public final class StructuresCompassItemPropertyGetter implements IItemPropertyG
     private final Angle r1 = new Angle();
     private final Angle r2 = new Angle();
     
-    private double getFrameRotation(@Nonnull ItemFrameEntity frameEntity) {
+    private double getFrameRotation(@Nonnull ItemFrame frameEntity) {
         Direction direction = frameEntity.getDirection();
         int i = direction.getAxis().isVertical() ? 90 * direction.getAxisDirection().getStep() : 0;
-        return MathHelper.wrapDegrees(180 + direction.get2DDataValue() * 90 + frameEntity.getRotation() * 45 + i);
+        return Mth.wrapDegrees(180 + direction.get2DDataValue() * 90 + frameEntity.getRotation() * 45 + i);
     }
     
     private static boolean closeEnough(@Nonnull Entity entity, @Nonnull BlockPos pos) {
@@ -67,7 +67,7 @@ public final class StructuresCompassItemPropertyGetter implements IItemPropertyG
         ) < (double)1.0E-5F;
     }
     
-    private static double getAngle(@Nonnull Vector3d vector, @Nonnull Entity entity) {
+    private static double getAngle(@Nonnull Vec3 vector, @Nonnull Entity entity) {
         return Math.atan2(vector.z() - entity.getZ(), vector.x() - entity.getX());
     }
     
@@ -82,34 +82,34 @@ public final class StructuresCompassItemPropertyGetter implements IItemPropertyG
      * @return the angle of the needle
      */
     @Override
-    public float call(@Nonnull ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity livingEntity) {
+    public float unclampedCall(@Nonnull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity livingEntity, int p) {
         Entity entity = livingEntity != null ? livingEntity : stack.getEntityRepresentation();
         if (entity == null) return 0F;
-        if (world == null && entity.level instanceof ClientWorld)
-            world = (ClientWorld) entity.level;
+        if (world == null && entity.level instanceof ClientLevel)
+            world = (ClientLevel) entity.level;
         if (world == null) return 0F;
         BlockPos pos = StructuresCompassItem.getPos(stack);
         if (pos != null
                 && world.dimension().location().toString().equals(StructuresCompassItem.getDimension(stack))
                 && !closeEnough(entity, pos)) {
-            boolean flag = entity instanceof PlayerEntity && ((PlayerEntity)entity).isLocalPlayer();
+            boolean flag = entity instanceof Player && ((Player)entity).isLocalPlayer();
             double d1 = 0.0D;
             if (flag) {
-                d1 = entity.yRot;
-            } else if (entity instanceof ItemFrameEntity) {
-                d1 = this.getFrameRotation((ItemFrameEntity)entity);
+                d1 = entity.getYRot();
+            } else if (entity instanceof ItemFrame) {
+                d1 = this.getFrameRotation((ItemFrame)entity);
             } else if (entity instanceof ItemEntity) {
                 d1 = (180.0F - ((ItemEntity)entity).getSpin(0.5F) / ((float)Math.PI * 2F) * 360.0F);
             } else if (livingEntity != null) {
                 d1 = livingEntity.yBodyRot;
             }
     
-            d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
-            double d2 = getAngle(Vector3d.atCenterOf(pos), entity) / (double)((float)Math.PI * 2F);
+            d1 = Mth.positiveModulo(d1 / 360.0D, 1.0D);
+            double d2 = getAngle(Vec3.atCenterOf(pos), entity) / (double)((float)Math.PI * 2F);
             double d3 = (flag) ? d2 + r1.wobble(world, 0.5D - (d1 - 0.25D)) : 0.5D - (d1 - 0.25D - d2);
-            return MathHelper.positiveModulo((float)d3, 1.0F);
+            return Mth.positiveModulo((float)d3, 1.0F);
         }
-        return MathHelper.positiveModulo(
+        return Mth.positiveModulo(
             (float)(r2.wobble(world, Math.random()) + (double)((float)stack.hashCode() / 2.14748365E9F)),
             1.0F
         );

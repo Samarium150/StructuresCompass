@@ -2,14 +2,11 @@ package com.github.samarium150.structurescompass.util;
 
 import com.github.samarium150.structurescompass.config.HUDPosition;
 import com.github.samarium150.structurescompass.config.StructuresCompassConfig;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.gui.Font;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,20 +26,20 @@ import javax.annotation.Nonnull;
 public abstract class RenderUtils {
     
     private static final Minecraft minecraft = Minecraft.getInstance();
-    private static final FontRenderer fontRenderer = minecraft.font;
+    private static final Font fontRenderer = minecraft.font;
     
     private RenderUtils() { }
     
-    private static void drawStringLeft(MatrixStack matrixStack, String string, int x, int y, int color) {
+    private static void drawStringLeft(PoseStack matrixStack, String string, int x, int y, int color) {
         fontRenderer.draw(matrixStack, string, x, y, color);
     }
     
-    private static void drawStringRight(MatrixStack matrixStack, String string, int x, int y, int color) {
+    private static void drawStringRight(PoseStack matrixStack, String string, int x, int y, int color) {
         fontRenderer.draw(matrixStack, string, x, y, color);
     }
     
     public static void drawConfiguredStringOnHUD(
-        MatrixStack matrixStack, String string,
+        PoseStack matrixStack, String string,
         int xOffset, int yOffset, int color, int relLineOffset
     ) {
         yOffset += (relLineOffset + StructuresCompassConfig.overlayLineOffset.get()) * 9;
@@ -58,14 +55,13 @@ public abstract class RenderUtils {
     }
     
     public static void updateBuffer(@Nonnull BufferBuilder buffer, int startX, int startY, int endX, int endY) {
-        buffer.begin(7, DefaultVertexFormats.POSITION);
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
         buffer.vertex(startX, endY, 0.0D).endVertex();
         buffer.vertex(endX, endY, 0.0D).endVertex();
         buffer.vertex(endX, startY, 0.0D).endVertex();
         buffer.vertex(startX, startY, 0.0D).endVertex();
     }
     
-    @SuppressWarnings("deprecation")
     public static void drawRect(int left, int top, int right, int bottom, int color) {
         if (left < right)
             left = GeneralUtils.swap(right, right = left);
@@ -77,8 +73,8 @@ public abstract class RenderUtils {
         final float blue = (float) (color & 255) / 255.0F;
         final float alpha = (float) (color >> 24 & 255) / 255.0F;
         
-        final Tessellator tessellator = Tessellator.getInstance();
-        final BufferBuilder buffer = tessellator.getBuilder();
+        final Tesselator tesselator = Tesselator.getInstance();
+        final BufferBuilder buffer = tesselator.getBuilder();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
         RenderSystem.blendFuncSeparate(
@@ -88,11 +84,10 @@ public abstract class RenderUtils {
             GlStateManager.DestFactor.ZERO
         );
         
-        // Annotated as deprecated but no replacement
-        RenderSystem.color4f(red, green, blue, alpha);
+        RenderSystem.setShaderColor(red, green, blue, alpha);
         
         updateBuffer(buffer, left, top, right, bottom);
-        tessellator.end();
+        tesselator.end();
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }

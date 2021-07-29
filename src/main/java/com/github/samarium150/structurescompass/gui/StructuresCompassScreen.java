@@ -7,16 +7,16 @@ import com.github.samarium150.structurescompass.network.packet.CompassSkipExisti
 import com.github.samarium150.structurescompass.util.StructureUtils;
 import com.github.samarium150.structurescompass.util.sort.Category;
 import com.github.samarium150.structurescompass.util.sort.NameCategory;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.gen.feature.structure.Structure;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -37,20 +37,20 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public final class StructuresCompassScreen extends Screen {
     
-    private final List<Structure<?>> allowedStructures = StructureUtils.allowedStructures;
+    private final List<StructureFeature<?>> allowedStructures = StructureUtils.allowedStructures;
     private final ItemStack stack;
-    private List<Structure<?>> structuresMatchingSearch;
+    private List<StructureFeature<?>> structuresMatchingSearch;
     private StructureSearchList selectionList;
     private Category category;
     private Button startSearchButton;
     private Button sortByButton;
     private Button skipExistingChunksButton;
-    private TextFieldWidget searchTextField;
+    private EditBox searchTextField;
     private boolean skip;
-    private Structure<?> selected;
+    private StructureFeature<?> selected;
     
     public StructuresCompassScreen(@Nonnull ItemStack stack) {
-        super(new TranslationTextComponent("string.structurescompass.select_structure"));
+        super(new TranslatableComponent("string.structurescompass.select_structure"));
         this.stack = stack;
         structuresMatchingSearch = new ArrayList<>(allowedStructures);
         category = new NameCategory();
@@ -58,55 +58,54 @@ public final class StructuresCompassScreen extends Screen {
     }
     
     private void setup() {
-        buttons.clear();
-        startSearchButton = addButton(new TransparentButton(
+        renderables.clear();
+        startSearchButton = addRenderableWidget(new TransparentButton(
             10, 40, 110, 20,
-            new TranslationTextComponent("string.structurescompass.start_searching"),
+            new TranslatableComponent("string.structurescompass.start_searching"),
             (onPress) -> {
                 StructureSearchEntry entry = selectionList.getSelected();
                 if (entry != null)
                     entry.search();
             }
         ));
-        sortByButton = addButton(new TransparentButton(
+        sortByButton = addRenderableWidget(new TransparentButton(
             10, 65, 110, 20,
-            new StringTextComponent(
+            new TextComponent(
                 I18n.get("string.structurescompass.sort_by") + ": " + category.getLocalizedName()
             ),
             (onPress) -> {
                 category = category.next();
-                sortByButton.setMessage(new StringTextComponent(
+                sortByButton.setMessage(new TextComponent(
                     I18n.get("string.structurescompass.sort_by") + ": " + category.getLocalizedName())
                 );
                 selectionList.refresh();
                 restoreSelected();
             }
         ));
-        skipExistingChunksButton = addButton(new TransparentButton(
+        skipExistingChunksButton = addRenderableWidget(new TransparentButton(
             10, 90, 110, 20,
-            new StringTextComponent(
+            new TextComponent(
                 I18n.get("string.structurescompass.skip_existing_chunks") + ": " + skip
             ),
             (onPress) -> {
                 skip = !skip;
-                skipExistingChunksButton.setMessage(new StringTextComponent(
+                skipExistingChunksButton.setMessage(new TextComponent(
                     I18n.get("string.structurescompass.skip_existing_chunks") + ": " + skip)
                 );
             }
         ));
-        addButton(new TransparentButton(
+        addRenderableWidget(new TransparentButton(
             10, height - 30, 110, 20,
-            new TranslationTextComponent("gui.cancel"),
+            new TranslatableComponent("gui.cancel"),
             (onPress) -> {
                 assert minecraft != null;
                 minecraft.setScreen(null);
             }
         ));
-        searchTextField = new TransparentTextField(
+        searchTextField = addWidget(new TransparentTextField(
             font, 130, 10, 140, 20,
-            new TranslationTextComponent("string.structurescompass.search")
-        );
-        children.add(searchTextField);
+            new TranslatableComponent("string.structurescompass.search")
+        ));
     }
     
     public void selectStructure(StructureSearchEntry entry) {
@@ -114,14 +113,14 @@ public final class StructuresCompassScreen extends Screen {
         if (entry != null) selected = entry.getStructure();
     }
     
-    public List<Structure<?>> sortStructures() {
-        final List<Structure<?>> structures = structuresMatchingSearch;
+    public List<StructureFeature<?>> sortStructures() {
+        final List<StructureFeature<?>> structures = structuresMatchingSearch;
         structures.sort(new NameCategory());
         structures.sort(category);
         return structuresMatchingSearch;
     }
     
-    public void search(@Nonnull Structure<?> structure) {
+    public void search(@Nonnull StructureFeature<?> structure) {
         assert minecraft != null;
         StructuresCompassNetwork.channel.sendToServer(new CompassSkipExistingChunksPacket(skip));
         StructuresCompassNetwork.channel.sendToServer(new CompassSearchPacket(structure.getRegistryName()));
@@ -130,19 +129,19 @@ public final class StructuresCompassScreen extends Screen {
     
     public void processSearchTerm() {
         structuresMatchingSearch = new ArrayList<>();
-        for (Structure<?> structure : allowedStructures) {
+        for (StructureFeature<?> structure : allowedStructures) {
             String temp = "";
             if (!searchTextField.getValue().isEmpty() && searchTextField.getValue().charAt(0) == '#')
                 temp = StructureUtils.getDimensions(structure);
             if ((!searchTextField.getValue().isEmpty() &&
-                    //source search
+                    // source search
                     (searchTextField.getValue().charAt(0) == '@' &&
                         StructureUtils.getStructureSource(structure).toLowerCase()
                             .contains(searchTextField.getValue().substring(1).toLowerCase())) ||
-                    //dim search
+                    // dim search
                     (!temp.isEmpty() && temp.toLowerCase()
                             .contains(searchTextField.getValue().substring(1).toLowerCase()))) ||
-                //normal search
+                // normal search
                 (StructureUtils.getLocalizedStructureName(structure).toLowerCase()
                     .contains(searchTextField.getValue().toLowerCase()))) {
                 structuresMatchingSearch.add(structure);
@@ -173,7 +172,7 @@ public final class StructuresCompassScreen extends Screen {
             selectionList.changeFocus(true);
             selectionList.restoreScrollAmount();
         }
-        children.add(selectionList);
+        addWidget(selectionList);
     }
     
     @Override
@@ -182,7 +181,7 @@ public final class StructuresCompassScreen extends Screen {
     }
     
     @Override
-    public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         renderBackground(matrixStack);
         selectionList.render(matrixStack, mouseX, mouseY, partialTicks);
         searchTextField.render(matrixStack, mouseX, mouseY, partialTicks);

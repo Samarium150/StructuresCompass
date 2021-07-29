@@ -5,30 +5,30 @@ import com.github.samarium150.structurescompass.init.ItemRegistry;
 import com.github.samarium150.structurescompass.item.StructuresCompassItem;
 import com.github.samarium150.structurescompass.util.RenderUtils;
 import com.github.samarium150.structurescompass.util.StructureUtils;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * The HUD of the compass
  */
-public final class StructuresCompassHUD extends AbstractGui {
+public final class StructuresCompassHUD extends GuiComponent {
     
     private static final Minecraft minecraft = Minecraft.getInstance();
-    private final MatrixStack matrixStack;
+    private final PoseStack matrixStack;
     
     /**
      * Initializer of the HUD
      * @param matrixStack MatrixStack from RenderGameOverlayEvent
      * @see net.minecraftforge.client.event.RenderGameOverlayEvent
      */
-    public StructuresCompassHUD(MatrixStack matrixStack) {
+    public StructuresCompassHUD(PoseStack matrixStack) {
         this.matrixStack = matrixStack;
     }
     
@@ -47,7 +47,7 @@ public final class StructuresCompassHUD extends AbstractGui {
         if (StructuresCompassConfig.HUD_Level.get() != 0 &&
                 (minecraft.screen == null || (StructuresCompassConfig.displayWithChatOpen.get()
                                                             && minecraft.screen instanceof ChatScreen))) {
-            final PlayerEntity player = minecraft.player;
+            final Player player = minecraft.player;
             final ItemStack stack;
             assert player != null;
             if (!player.getMainHandItem().isEmpty()
@@ -98,7 +98,7 @@ public final class StructuresCompassHUD extends AbstractGui {
             
                     if (player.getCommandSenderWorld().dimension().location().toString().equals(dim)) {
                 
-                        Vector3d dis = StructureUtils.getDistance(pos, player);
+                        Vec3 dis = StructureUtils.getDistance(pos, player);
                         double disX = dis.x();
                         double disY = dis.y();
                         double disZ = dis.z();

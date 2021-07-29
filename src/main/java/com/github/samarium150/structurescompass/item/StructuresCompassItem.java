@@ -6,26 +6,26 @@ import com.github.samarium150.structurescompass.network.packet.CompassSearchPack
 import com.github.samarium150.structurescompass.network.packet.RequestSyncPacket;
 import com.github.samarium150.structurescompass.util.ItemUtils;
 import com.github.samarium150.structurescompass.util.StructureUtils;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.nbt.ByteNBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.LongNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
@@ -48,7 +48,7 @@ public final class StructuresCompassItem extends Item {
      * Initializer of the item
      */
     public StructuresCompassItem() {
-        super(new Item.Properties().tab(ItemGroup.TAB_TOOLS).stacksTo(1).rarity(Rarity.COMMON));
+        super(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).rarity(Rarity.COMMON));
     }
     
     /**
@@ -59,9 +59,9 @@ public final class StructuresCompassItem extends Item {
      */
     @Nonnull
     public static ItemStack setStructureName(String name, @Nonnull ItemStack stack) {
-        CompoundNBT tag = ItemUtils.getOrCreateItemTag(stack);
+        CompoundTag tag = ItemUtils.getOrCreateItemTag(stack);
         if (tag != null) {
-            tag.put(STRUCTURE_TAG, StringNBT.valueOf(name));
+            tag.put(STRUCTURE_TAG, StringTag.valueOf(name));
             stack.setTag(tag);
         }
         return stack;
@@ -74,7 +74,7 @@ public final class StructuresCompassItem extends Item {
      */
     @Nullable
     public static String getStructureName(@Nonnull ItemStack stack) {
-        CompoundNBT tag = ItemUtils.getItemTag(stack);
+        CompoundTag tag = ItemUtils.getItemTag(stack);
         return (tag != null) ? tag.getString(STRUCTURE_TAG) : null;
     }
     
@@ -84,9 +84,9 @@ public final class StructuresCompassItem extends Item {
      * @param stack ItemStack
      */
     public static void setPos(BlockPos pos, @Nonnull ItemStack stack) {
-        CompoundNBT tag = ItemUtils.getOrCreateItemTag(stack);
+        CompoundTag tag = ItemUtils.getOrCreateItemTag(stack);
         if (tag != null) {
-            tag.put(POS_TAG, LongNBT.valueOf(pos.asLong()));
+            tag.put(POS_TAG, LongTag.valueOf(pos.asLong()));
             stack.setTag(tag);
         }
     }
@@ -98,7 +98,7 @@ public final class StructuresCompassItem extends Item {
      */
     @Nullable
     public static BlockPos getPos(@Nonnull ItemStack stack) {
-        CompoundNBT tag = ItemUtils.getItemTag(stack);
+        CompoundTag tag = ItemUtils.getItemTag(stack);
         return (tag != null && tag.contains(POS_TAG, Constants.NBT.TAG_LONG)) ?
                    BlockPos.of(tag.getLong(POS_TAG)) : null;
     }
@@ -109,9 +109,9 @@ public final class StructuresCompassItem extends Item {
      * @param stack ItemStack
      */
     public static void setDimension(String dimension, @Nonnull ItemStack stack) {
-        CompoundNBT tag = ItemUtils.getOrCreateItemTag(stack);
+        CompoundTag tag = ItemUtils.getOrCreateItemTag(stack);
         if (tag != null) {
-            tag.put(DIM_TAG, StringNBT.valueOf(dimension));
+            tag.put(DIM_TAG, StringTag.valueOf(dimension));
             stack.setTag(tag);
         }
     }
@@ -123,7 +123,7 @@ public final class StructuresCompassItem extends Item {
      */
     @Nullable
     public static String getDimension(@Nonnull ItemStack stack) {
-        CompoundNBT tag = ItemUtils.getItemTag(stack);
+        CompoundTag tag = ItemUtils.getItemTag(stack);
         return (tag != null) ? tag.getString(DIM_TAG) : null;
     }
     
@@ -133,13 +133,13 @@ public final class StructuresCompassItem extends Item {
      * @param stack ItemStack
      */
     public static void setSkip(Boolean skip, @Nonnull ItemStack stack) {
-        CompoundNBT tag = ItemUtils.getOrCreateItemTag(stack);
+        CompoundTag tag = ItemUtils.getOrCreateItemTag(stack);
         if (tag != null) {
             if (!skip) {
                 ItemUtils.removeTag(stack, SKIP_TAG);
                 return;
             }
-            tag.put(SKIP_TAG, ByteNBT.valueOf(true));
+            tag.put(SKIP_TAG, ByteTag.valueOf(true));
             stack.setTag(tag);
         }
     }
@@ -150,7 +150,7 @@ public final class StructuresCompassItem extends Item {
      * @return SkipExistingChunks property
      */
     public static boolean isSkip(@Nonnull ItemStack stack) {
-        CompoundNBT tag = ItemUtils.getItemTag(stack);
+        CompoundTag tag = ItemUtils.getItemTag(stack);
         return tag != null && tag.getBoolean(SKIP_TAG);
     }
     
@@ -160,9 +160,9 @@ public final class StructuresCompassItem extends Item {
      * @param player PlayerEntity
      * @param structure Structure
      * @param stack ItemStack
-     * @see ServerWorld#findNearestMapFeature
+     * @see ServerLevel#findNearestMapFeature
      */
-    public static void search(@Nonnull ServerWorld world, PlayerEntity player, @Nonnull Structure<?> structure, ItemStack stack) {
+    public static void search(@Nonnull ServerLevel world, Player player, @Nonnull StructureFeature<?> structure, ItemStack stack) {
         ResourceLocation registry = structure.getRegistryName();
         assert registry != null;
         setStructureName(registry.toString(), stack);
@@ -175,7 +175,7 @@ public final class StructuresCompassItem extends Item {
             ItemUtils.removeTag(stack, DIM_TAG);
             ItemUtils.removeTag(stack, POS_TAG);
         } else {
-            Vector3d dis = StructureUtils.getDistance(pos, player);
+            Vec3 dis = StructureUtils.getDistance(pos, player);
             double distance = (double) Math.round(dis.length() * 100) / 100;
             if (distance > StructuresCompassConfig.maxDistance.get()) {
                 ItemUtils.removeTag(stack, DIM_TAG);
@@ -188,12 +188,12 @@ public final class StructuresCompassItem extends Item {
     }
     
     @OnlyIn(Dist.CLIENT)
-    private static void sendMessage(String msg, @Nonnull PlayerEntity entity) {
-        entity.sendMessage(new StringTextComponent(msg), entity.getUUID());
+    private static void sendMessage(String msg, @Nonnull Player entity) {
+        entity.sendMessage(new TextComponent(msg), entity.getUUID());
     }
     
-    private static void sendTranslatedMessage(String translationKey, @Nonnull PlayerEntity entity) {
-        entity.sendMessage(new TranslationTextComponent(translationKey), entity.getUUID());
+    private static void sendTranslatedMessage(String translationKey, @Nonnull Player entity) {
+        entity.sendMessage(new TranslatableComponent(translationKey), entity.getUUID());
     }
     
     /**
@@ -210,10 +210,10 @@ public final class StructuresCompassItem extends Item {
      */
     @Override
     @Nonnull
-    public ActionResult<ItemStack> use(
-        @Nonnull World world,
-        @Nonnull PlayerEntity player,
-        @Nonnull Hand hand
+    public InteractionResultHolder<ItemStack> use(
+        @Nonnull Level world,
+        @Nonnull Player player,
+        @Nonnull InteractionHand hand
     ) {
         ItemStack stack = player.getMainHandItem();
         if (world.isClientSide)
@@ -225,7 +225,7 @@ public final class StructuresCompassItem extends Item {
                     sendMessage(I18n.get("string.structurescompass.msg_no_target"), player);
                     return super.use(world, player, hand);
                 }
-                Structure<?> structure = Structure.STRUCTURES_REGISTRY.get(name.replace("minecraft:", ""));
+                StructureFeature<?> structure = StructureFeature.STRUCTURES_REGISTRY.get(name.replace("minecraft:", ""));
                 if (structure == null) {
                     sendMessage(I18n.get("string.structurescompass.msg_error_name") + name, player);
                     return super.use(world, player, hand);

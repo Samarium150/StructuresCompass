@@ -1,11 +1,11 @@
 package com.github.samarium150.structurescompass.gui;
 
 import com.github.samarium150.structurescompass.util.RenderUtils;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 @OnlyIn(Dist.CLIENT)
 public class TransparentButton extends Button {
     
-    public TransparentButton(int x, int y, int width, int height, ITextComponent title, IPressable pressedAction) {
+    public TransparentButton(int x, int y, int width, int height, Component title, OnPress pressedAction) {
         super(x, y, width, height, title, pressedAction);
     }
     
@@ -33,17 +33,16 @@ public class TransparentButton extends Button {
     }
     
     /**
-     * "Override" static method in AbstractGui to draw centered string without shadow
+     * draw centered string without shadow
      * @param matrixStack MatrixStack
      * @param fontRenderer FontRenderer
      * @param text ITextComponent
      * @param x x position
      * @param y y position
      * @param color color of the text
-     * @see net.minecraft.client.gui.AbstractGui#drawCenteredString
      */
     public static void drawCenteredString(
-        @Nonnull MatrixStack matrixStack, @Nonnull FontRenderer fontRenderer, @Nonnull ITextComponent text,
+        @Nonnull PoseStack matrixStack, @Nonnull Font fontRenderer, @Nonnull Component text,
         int x, int y, int color
     ) {
         fontRenderer.draw(
@@ -53,7 +52,7 @@ public class TransparentButton extends Button {
     }
     
     @Override
-    public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (visible) {
             Minecraft minecraft = Minecraft.getInstance();
             float state = getHoverState(isHovered());

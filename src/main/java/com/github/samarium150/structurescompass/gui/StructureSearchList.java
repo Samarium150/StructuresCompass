@@ -2,10 +2,10 @@ package com.github.samarium150.structurescompass.gui;
 
 import com.github.samarium150.structurescompass.util.RenderUtils;
 import com.github.samarium150.structurescompass.util.StructureUtils;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.list.ExtendedList;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,7 +24,7 @@ import java.util.Objects;
  * </a>.
  */
 @OnlyIn(Dist.CLIENT)
-public final class StructureSearchList extends ExtendedList<StructureSearchEntry> {
+public final class StructureSearchList extends ObjectSelectionList<StructureSearchEntry> {
     
     private final StructuresCompassScreen screen;
     private final HashMap<String, StructureSearchEntry> map = new HashMap<>();
@@ -45,13 +45,13 @@ public final class StructureSearchList extends ExtendedList<StructureSearchEntry
         screen.selectStructure(entry);
     }
     
-    public void selectStructure(Structure<?> structure) {
+    public void selectStructure(StructureFeature<?> structure) {
         selectStructure(map.get(StructureUtils.getStructureName(structure)));
     }
     
     public void refresh() {
         clearEntries();
-        for (Structure<?> structure : screen.sortStructures()) {
+        for (StructureFeature<?> structure : screen.sortStructures()) {
             StructureSearchEntry entry = new StructureSearchEntry(this, structure);
             addEntry(entry);
             map.put(StructureUtils.getStructureName(structure), entry);
@@ -84,7 +84,7 @@ public final class StructureSearchList extends ExtendedList<StructureSearchEntry
     }
     
     @Override
-    protected void renderList(@Nonnull MatrixStack matrixStack, int x, int y, int mouseX, int mouseY, float partialTicks) {
+    protected void renderList(@Nonnull PoseStack matrixStack, int x, int y, int mouseX, int mouseY, float partialTicks) {
         for (int i = 0; i < getItemCount(); ++i) {
             int top = getRowTop(i);
             int bottom = top + itemHeight;
@@ -107,7 +107,7 @@ public final class StructureSearchList extends ExtendedList<StructureSearchEntry
     }
     
     @Override
-    public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         renderList(matrixStack, getRowLeft(), y0 + 4 - (int) getScrollAmount(), mouseX, mouseY, partialTicks);
     }
 }

@@ -4,12 +4,12 @@ import com.github.samarium150.structurescompass.gui.StructuresCompassGUI;
 import com.github.samarium150.structurescompass.util.GeneralUtils;
 import com.github.samarium150.structurescompass.util.Serializer;
 import com.github.samarium150.structurescompass.util.StructureUtils;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public final class SyncPacket implements Packet, Serializer<HashMap<String, List<String>>> {
     
     private final ItemStack stack;
-    private final List<Structure<?>> allowed;
+    private final List<StructureFeature<?>> allowed;
     private final HashMap<String, List<String>> map;
     
     /**
@@ -35,7 +35,7 @@ public final class SyncPacket implements Packet, Serializer<HashMap<String, List
      * @see StructureUtils#allowedStructures
      * @see StructureUtils#structuresDimensionMap
      */
-    public SyncPacket(ItemStack stack, List<Structure<?>> allowed, HashMap<String, List<String>> map) {
+    public SyncPacket(ItemStack stack, List<StructureFeature<?>> allowed, HashMap<String, List<String>> map) {
         this.stack = stack;
         this.allowed = allowed;
         this.map = map;
@@ -45,7 +45,7 @@ public final class SyncPacket implements Packet, Serializer<HashMap<String, List
      * Decoder of the packet
      * @param buffer PacketBuffer
      */
-    public SyncPacket(@Nonnull PacketBuffer buffer) {
+    public SyncPacket(@Nonnull FriendlyByteBuf buffer) {
         stack = buffer.readItem();
         allowed = new ArrayList<>();
         int size = buffer.readInt();
@@ -66,7 +66,7 @@ public final class SyncPacket implements Packet, Serializer<HashMap<String, List
     }
     
     @Override
-    public void toBytes(@Nonnull PacketBuffer buffer) {
+    public void toBytes(@Nonnull FriendlyByteBuf buffer) {
         buffer.writeItem(stack);
         buffer.writeInt(allowed.size());
         allowed.forEach(structure -> buffer.writeResourceLocation(StructureUtils.getResourceForStructure(structure)));

@@ -1,14 +1,14 @@
 package com.github.samarium150.structurescompass.util;
 
 import com.github.samarium150.structurescompass.config.StructuresCompassConfig;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModContainer;
@@ -27,7 +27,7 @@ import java.util.Optional;
  */
 public abstract class StructureUtils {
     
-    public static List<Structure<?>> allowedStructures;
+    public static List<StructureFeature<?>> allowedStructures;
     
     public static HashMap<String, List<String>> structuresDimensionMap;
     
@@ -38,7 +38,7 @@ public abstract class StructureUtils {
      * @param structure the given structure
      * @return the corresponding ResourceLocation
      */
-    public static ResourceLocation getResourceForStructure(@Nonnull Structure<?> structure) {
+    public static ResourceLocation getResourceForStructure(@Nonnull StructureFeature<?> structure) {
         return ForgeRegistries.STRUCTURE_FEATURES.getKey(structure);
     }
     
@@ -48,7 +48,7 @@ public abstract class StructureUtils {
      * @return the corresponding structure
      */
     @Nullable
-    public static Structure<?> getStructureForResource(ResourceLocation resource) {
+    public static StructureFeature<?> getStructureForResource(ResourceLocation resource) {
         return ForgeRegistries.STRUCTURE_FEATURES.getValue(resource);
     }
     
@@ -57,9 +57,9 @@ public abstract class StructureUtils {
      * @return a list of allowed structures
      */
     @Nonnull
-    public static List<Structure<?>> getAllowedStructures() {
-        final List<Structure<?>> result = new ArrayList<>();
-        for (Structure<?> structureFeature : ForgeRegistries.STRUCTURE_FEATURES) {
+    public static List<StructureFeature<?>> getAllowedStructures() {
+        final List<StructureFeature<?>> result = new ArrayList<>();
+        for (StructureFeature<?> structureFeature : ForgeRegistries.STRUCTURE_FEATURES) {
             ResourceLocation res = structureFeature.getRegistryName();
             if (res == null || isStructureBanned(res.toString()))
                 continue;
@@ -83,7 +83,7 @@ public abstract class StructureUtils {
      * @return the name of the structure
      */
     @Nonnull
-    public static String getStructureName(@Nonnull Structure<?> structure) {
+    public static String getStructureName(@Nonnull StructureFeature<?> structure) {
         ResourceLocation registry = structure.getRegistryName();
         return (registry == null) ? "" : registry.toString();
     }
@@ -111,7 +111,7 @@ public abstract class StructureUtils {
      */
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    public static String getLocalizedStructureName(@Nonnull Structure<?> structure) {
+    public static String getLocalizedStructureName(@Nonnull StructureFeature<?> structure) {
         return getLocalizedStructureName(getStructureName(structure));
     }
     
@@ -122,7 +122,7 @@ public abstract class StructureUtils {
      * @return a list of dimensions
      */
     @Nonnull
-    public static List<String> getDimensions(@Nonnull ServerWorld world, Structure<?> structure) {
+    public static List<String> getDimensions(@Nonnull ServerLevel world, StructureFeature<?> structure) {
         final List<String> dims = new ArrayList<>();
         MinecraftServer server = world.getServer();
         server.getAllLevels().forEach(w->{
@@ -138,7 +138,7 @@ public abstract class StructureUtils {
      * @return a string represented list
      */
     @Nonnull
-    public static String getDimensions(@Nonnull Structure<?> structure) {
+    public static String getDimensions(@Nonnull StructureFeature<?> structure) {
         List<String> dims = StructureUtils.structuresDimensionMap.getOrDefault(
             StructureUtils.getResourceForStructure(structure).toString(),
             new ArrayList<>()
@@ -166,7 +166,7 @@ public abstract class StructureUtils {
      * @param structure the given structure
      * @return the name of the mod
      */
-    public static String getStructureSource(@Nonnull Structure<?> structure) {
+    public static String getStructureSource(@Nonnull StructureFeature<?> structure) {
         if (getResourceForStructure(structure) == null)
             return "";
         String registry = getResourceForStructure(structure).toString();
@@ -186,10 +186,10 @@ public abstract class StructureUtils {
      * @return the distance vector
      */
     @Nonnull
-    public static Vector3d getDistance(@Nonnull BlockPos pos, @Nonnull Entity entity) {
+    public static Vec3 getDistance(@Nonnull BlockPos pos, @Nonnull Entity entity) {
         double disX = (double) Math.round((pos.getX() - entity.getX()) * 100) / 100;
         double disY = pos.getY() == 0 ? 0 : (double) Math.round((pos.getY() - entity.getY()) * 100) / 100;
         double disZ = (double) Math.round((pos.getZ() - entity.getZ()) * 100) / 100;
-        return new Vector3d(disX, disY, disZ);
+        return new Vec3(disX, disY, disZ);
     }
 }

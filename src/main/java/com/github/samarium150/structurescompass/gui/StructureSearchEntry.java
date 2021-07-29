@@ -1,16 +1,17 @@
 package com.github.samarium150.structurescompass.gui;
 
 import com.github.samarium150.structurescompass.util.StructureUtils;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.widget.list.ExtendedList.AbstractListEntry;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.client.gui.components.ObjectSelectionList.Entry;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,15 +28,15 @@ import javax.annotation.Nonnull;
  * </a>.
  */
 @OnlyIn(Dist.CLIENT)
-public final class StructureSearchEntry extends AbstractListEntry<StructureSearchEntry> {
+public final class StructureSearchEntry extends Entry<StructureSearchEntry> {
     
     private final Minecraft minecraft;
     private final StructureSearchList list;
-    private final Structure<?> structure;
+    private final StructureFeature<?> structure;
     private final StructuresCompassScreen screen;
     private long lastTickTime;
     
-    public StructureSearchEntry(@Nonnull StructureSearchList list, Structure<?> structure) {
+    public StructureSearchEntry(@Nonnull StructureSearchList list, StructureFeature<?> structure) {
         minecraft = Minecraft.getInstance();
         this.list = list;
         this.structure = structure;
@@ -43,18 +44,17 @@ public final class StructureSearchEntry extends AbstractListEntry<StructureSearc
     }
     
     public void search() {
-        minecraft.getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         screen.search(structure);
     }
 
-    public Structure<?> getStructure() {
+    public StructureFeature<?> getStructure() {
         return structure;
     }
     
-    @SuppressWarnings("deprecation")
     @Override
     public void render(
-        @Nonnull MatrixStack matrixStack,
+        @Nonnull PoseStack matrixStack,
         int index, int top, int left, int width, int height, int mouseX, int mouseY,
         boolean isMouseOver, float partialTicks
     ) {
@@ -63,16 +63,16 @@ public final class StructureSearchEntry extends AbstractListEntry<StructureSearc
             left + 1, top + 1, 0xffffff
         );
         minecraft.font.draw(matrixStack,
-            new StringTextComponent(I18n.get("string.structurescompass.source") + ": "
+            new TextComponent(I18n.get("string.structurescompass.source") + ": "
                                         + StructureUtils.getStructureSource(structure)),
             left + 1, top + minecraft.font.lineHeight + 3, 0x808080
         );
         minecraft.font.draw(matrixStack,
-            new StringTextComponent(I18n.get("string.structurescompass.dimension") + ": "
+            new TextComponent(I18n.get("string.structurescompass.dimension") + ": "
                                         + StructureUtils.getDimensions(structure)),
             left + 1, top + minecraft.font.lineHeight + 14, 0x808080
         );
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
     
     @Override
@@ -86,5 +86,12 @@ public final class StructureSearchEntry extends AbstractListEntry<StructureSearc
             lastTickTime = Util.getMillis();
         }
         return false;
+    }
+    
+    @Nonnull
+    @Override
+    public Component getNarration() {
+        return new TextComponent(I18n.get("string.structurescompass.source") + ": "
+                                     + StructureUtils.getStructureSource(structure));
     }
 }
