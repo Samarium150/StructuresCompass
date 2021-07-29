@@ -1,3 +1,10 @@
+<a name="1.15.2-1.2.0"></a>
+# 1.15.2-1.2.0 (2021/07/29)
+
+
+## Revert
+
+* remove the configurable recipe feature ([de2903a4](https://github.com/Samarium150/StructuresCompass/commits/de2903a4))
 <a name="1.15.2-1.1.1"></a>
 # 1.15.2-1.1.1 (2021/07/20)
 
