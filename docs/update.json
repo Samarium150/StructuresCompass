@@ -14,10 +14,15 @@
     "1.1.1": "https://www.curseforge.com/minecraft/mc-mods/structures-compass/files/3393986",
     "1.2.0": "https://www.curseforge.com/minecraft/mc-mods/structures-compass/files/3404723"
   },
+  "1.17.1": {
+    "1.2.1": "https://www.curseforge.com/minecraft/mc-mods/structures-compass/files/3405206"
+  },
   "promos": {
     "1.15.2-latest": "1.2.0",
     "1.15.2-recommended": "1.2.0",
     "1.16.5-latest": "1.2.0",
-    "1.16.5-recommended": "1.2.0"
+    "1.16.5-recommended": "1.2.0",
+    "1.17.1-latest": "1.2.1",
+    "1.17.1-recommended": "1.2.1"
   }
 }
