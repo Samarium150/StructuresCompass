@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.0.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 
@@ -16,7 +16,7 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
-def baseVersion = '1.1.1'
+def baseVersion = '1.2.0'
 def minecraftVersion = '1.15.2'
 version = "${minecraftVersion}-${baseVersion}" as Object
 group = 'com.github.samarium150'
@@ -31,30 +31,37 @@ logger.quiet('Java: {} JVM: {}({}) Arch: {}',
     System.getProperty('os.arch')
 )
 
-sourceSets.main.java { srcDir 'src/main/java' }
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+    }
+}
+def mainSourceSet = sourceSets.main
 
 minecraft {
-    mappings channel: 'snapshot', version: '20210719-1.15.1'
+    mappings channel: 'snapshot', version: '20210728-1.15.1'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
-            workingDirectory project.file('run')
+            workingDirectory file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
                 structurescompass {
-                    source sourceSets.main
+                    source mainSourceSet
                 }
             }
         }
         server {
-            workingDirectory project.file('run')
+            workingDirectory file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
                 structurescompass {
-                    source sourceSets.main
+                    source mainSourceSet
                 }
             }
         }
