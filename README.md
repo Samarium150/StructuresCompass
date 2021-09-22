@@ -11,6 +11,18 @@ Structures' Compass a Minecraft Forge mod allows player to quickly locate a spec
 
 This mod is inspired by [Nature's Compass](https://github.com/MattCzyr/NaturesCompass), and part of our code is from their mod.
 
+<div align="center">
+    <p>
+        <sub>Need a server to play with friends? Don't know how to set up one? Just rent already configured server!</sub>
+    </p>
+    <a href="https://www.bisecthosting.com/FishToucher" target="_blank">
+        <img src="docs/images/BisectHostingBanner.png" alt="Banner" width="50%">
+    </a>
+    <p>
+        <sub>Click on the picture above, select plan, use our code <strong>FishToucher</strong> to get 25% off your first month and enjoy playing with your friends!</sub>
+    </p>
+</div>
+
 ## Features
 - Sneak + right click with the Structures' Compass in hand to open the searching GUI.
   - search structure's name directly
