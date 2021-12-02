@@ -16,8 +16,8 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
-def previousVersion = '1.2.0'
-def baseVersion = '1.2.1'
+def previousVersion = '1.2.1'
+def baseVersion = '1.2.2'
 def minecraftVersion = '1.17.1'
 version = "${minecraftVersion}-${baseVersion}" as Object
 group = 'com.github.samarium150'
@@ -73,7 +73,7 @@ minecraft {
 // sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.13'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.1.0'
 }
 
 compileJava {

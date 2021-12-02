@@ -7,28 +7,24 @@ import com.github.samarium150.structurescompass.network.packet.RequestSyncPacket
 import com.github.samarium150.structurescompass.util.ItemUtils;
 import com.github.samarium150.structurescompass.util.StructureUtils;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.nbt.ByteTag;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.LongTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.nbt.*;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -99,7 +95,7 @@ public final class StructuresCompassItem extends Item {
     @Nullable
     public static BlockPos getPos(@Nonnull ItemStack stack) {
         CompoundTag tag = ItemUtils.getItemTag(stack);
-        return (tag != null && tag.contains(POS_TAG, Constants.NBT.TAG_LONG)) ?
+        return (tag != null && tag.contains(POS_TAG, Tag.TAG_LONG)) ?
                    BlockPos.of(tag.getLong(POS_TAG)) : null;
     }
     
