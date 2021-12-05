@@ -80,17 +80,27 @@ public abstract class StructureUtils {
      * @return is banned or not
      */
     public static boolean isStructureBanned(String name) {
-        return StructuresCompassConfig.blacklist.get().contains(name);
+        boolean flag = StructuresCompassConfig.filterMode.get() == StructuresCompassConfig.Mode.whitelist;
+        ArrayList<String> filters = StructuresCompassConfig.filter.get();
+        for (String filter : filters) {
+            String rx = GeneralUtils.convertToRegex(filter);
+            boolean matching = name.matches(rx);
+            if (flag && matching)
+                return false;
+            else if (matching)
+                return true;
+        }
+        return flag;
     }
     
     @Nonnull
     public static String cleanupResourceName(@Nonnull String resource) {
         return resource
-                   .replace("nether_bridge", "fortress")
-                   .replace("end_city", "endcity")
-                   .replace("jungle_temple", "jungle_pyramid")
-                   .replace("ocean_monument", "monument")
-                   .replace("woodland_mansion", "mansion");
+            .replace("nether_bridge", "fortress")
+            .replace("end_city", "endcity")
+            .replace("jungle_temple", "jungle_pyramid")
+            .replace("ocean_monument", "monument")
+            .replace("woodland_mansion", "mansion");
     }
     
     /**

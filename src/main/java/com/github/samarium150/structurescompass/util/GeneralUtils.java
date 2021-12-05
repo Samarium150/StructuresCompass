@@ -43,4 +43,32 @@ public abstract class GeneralUtils {
             ret.add(text.substring(start, Math.min(text.length(), start + size)));
         return ret;
     }
+    
+    /**
+     * Convert string to regex
+     * @param glob input string
+     * @return regex string
+     */
+    @Nonnull
+    public static String convertToRegex(@Nonnull String glob) {
+        StringBuilder regex = new StringBuilder("^");
+        for (char i = 0; i < glob.length(); i++) {
+            char c = glob.charAt(i);
+            switch (c) {
+                case '*':
+                    regex.append(".*");
+                    break;
+                case '?':
+                    regex.append(".");
+                    break;
+                case '.':
+                    regex.append("\\.");
+                    break;
+                default:
+                    regex.append(c);
+            }
+        }
+        regex.append("$");
+        return regex.toString();
+    }
 }
