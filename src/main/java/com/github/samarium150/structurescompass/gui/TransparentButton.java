@@ -55,7 +55,7 @@ public class TransparentButton extends Button {
     public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (visible) {
             Minecraft minecraft = Minecraft.getInstance();
-            float state = getHoverState(isHovered());
+            float state = getHoverState(isHovered);
             final float f = state / 2 * 0.9F + 0.1F;
             final int color = (int) (255.0F * f);
         

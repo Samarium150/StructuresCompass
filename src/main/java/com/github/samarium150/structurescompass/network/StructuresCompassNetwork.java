@@ -6,8 +6,8 @@ import com.github.samarium150.structurescompass.network.packet.RequestSyncPacket
 import com.github.samarium150.structurescompass.network.packet.SyncPacket;
 import com.github.samarium150.structurescompass.util.GeneralUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 /**
  * Class for handling network events

@@ -1,7 +1,7 @@
 package com.github.samarium150.structurescompass.network.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;

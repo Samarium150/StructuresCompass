@@ -3,7 +3,7 @@ package com.github.samarium150.structurescompass.init;
 import com.github.samarium150.structurescompass.item.StructuresCompassItem;
 import com.github.samarium150.structurescompass.util.GeneralUtils;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 

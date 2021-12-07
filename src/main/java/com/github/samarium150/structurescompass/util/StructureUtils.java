@@ -2,13 +2,12 @@ package com.github.samarium150.structurescompass.util;
 
 import com.github.samarium150.structurescompass.config.StructuresCompassConfig;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModContainer;
@@ -133,13 +132,14 @@ public abstract class StructureUtils {
      */
     @Nonnull
     public static List<String> getDimensions(@Nonnull ServerLevel world, StructureFeature<?> structure) {
-        final List<String> dims = new ArrayList<>();
-        MinecraftServer server = world.getServer();
-        server.getAllLevels().forEach(w->{
-            if (w.getChunkSource().getGenerator().getBiomeSource().canGenerateStructure(structure))
-                dims.add(w.dimension().location().toString());
-        });
-        return dims;
+//        final List<String> dims = new ArrayList<>();
+//        MinecraftServer server = world.getServer();
+//        server.getAllLevels().forEach(w->{
+//            // canGenerateStructure method doesn't exist in 1.18
+//            if (w.getChunkSource().getGenerator().getBiomeSource().canGenerateStructure(structure))
+//                dims.add(w.dimension().location().toString());
+//        });
+        return new ArrayList<>();
     }
     
     /**
