@@ -16,8 +16,8 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
-def previousVersion = '1.2.1'
-def baseVersion = '1.2.2'
+def previousVersion = '1.2.2'
+def baseVersion = '1.3.0'
 def minecraftVersion = '1.17.1'
 version = "${minecraftVersion}-${baseVersion}" as Object
 group = 'com.github.samarium150'
