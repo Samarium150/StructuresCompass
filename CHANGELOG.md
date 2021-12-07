@@ -1,3 +1,10 @@
+<a name="1.15.2-1.3.0"></a>
+# 1.15.2-1.3.0 (2021/12/07)
+
+
+## Features
+
+* add whitelist mode ([a881937a](https://github.com/Samarium150/StructuresCompass/commits/a881937a))
 <a name="1.15.2-1.2.0"></a>
 # 1.15.2-1.2.0 (2021/07/29)
 
