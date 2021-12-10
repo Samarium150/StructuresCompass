@@ -4,6 +4,7 @@
 [![Minecraft](http://cf.way2muchnoise.eu/versions/For%20MC_491151_all.svg)](https://minecraft.fandom.com/wiki/Java_Edition_1.16.5)
 [![GitHub](https://img.shields.io/github/license/Samarium150/StructuresCompass)](https://github.com/Samarium150/StructuresCompass/blob/master/LICENSE)
 [![Gradle CI](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml/badge.svg)](https://github.com/Samarium150/StructuresCompass/actions/workflows/Gradle%20CI.yml)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSamarium150%2FStructuresCompass.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSamarium150%2FStructuresCompass?ref=badge_shield)
 
 [简体中文](docs/README-zh.md)
 
@@ -81,3 +82,6 @@ which is under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 Intern
 and we've annotated it in the doc string. 
 Because CC BY-NC-SA 4.0 is not a software license, we choose [GNU General Public License 3.0](https://www.gnu.org/licenses/gpl-3.0.html) 
 for other parts of the code to discourage commercial usage.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSamarium150%2FStructuresCompass.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FSamarium150%2FStructuresCompass?ref=badge_large)
