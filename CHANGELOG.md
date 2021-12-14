@@ -1,21 +1,11 @@
-<a name="1.17.1-1.3.0"></a>
-# 1.17.1-1.3.0 (2021/12/07)
+<a name="1.18.1-1.3.0-beta.1"></a>
+# 1.18.1-1.3.0-beta.1 (2021/12/14)
 
 
 ## Features
 
-* add whitelist mode ([d17fb071](https://github.com/Samarium150/StructuresCompass/commits/d17fb071))
-<a name="1.17.1-1.2.2"></a>
-# 1.17.1-1.2.2 (2021/12/02)
+* implement basic functionalities in 1.18.1 ([a1905ff9](https://github.com/Samarium150/StructuresCompass/commits/a1905ff9))
 
-## Build
-
-* update Forge to the recommended version ([dcab05ca](https://github.com/Samarium150/StructuresCompass/commits/dcab05ca))
-
-<a name="1.17.1-1.2.1"></a>
-# 1.17.1-1.2.1 (2021/07/29)
-
-
-## Features
-
-* implement basic functionalities in 1.17.1 ([6f6bc6e1](https://github.com/Samarium150/StructuresCompass/commits/6f6bc6e1))
+WARNING: This release is a beta release. 
+Structure's available dimensions are not available, because Mojang or Forge deleted the critical function,
+and we don't find a new way to make a polyfill. We may remove this feature in the future.
