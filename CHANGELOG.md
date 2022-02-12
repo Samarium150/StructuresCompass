@@ -1,3 +1,15 @@
+<a name="1.18.1-1.3.0"></a>
+# 1.18.1-1.3.0 (2022/02/12)
+
+
+## Bug Fixes
+
+* polyfill canGenerateStructure ([3da7fef9](https://github.com/Samarium150/StructuresCompass/commits/3da7fef9))
+
+## Refactor
+
+* rename and relocate
+
 <a name="1.18.1-1.3.0-beta.1"></a>
 # 1.18.1-1.3.0-beta.1 (2021/12/14)
 
