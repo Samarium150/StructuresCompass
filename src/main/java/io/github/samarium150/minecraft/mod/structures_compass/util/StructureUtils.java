@@ -3,9 +3,15 @@ package io.github.samarium150.minecraft.mod.structures_compass.util;
 import io.github.samarium150.minecraft.mod.structures_compass.config.StructuresCompassConfig;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.StructureSettings;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,10 +22,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Utilities related to structures
@@ -132,14 +136,38 @@ public abstract class StructureUtils {
      */
     @Nonnull
     public static List<String> getDimensions(@Nonnull ServerLevel world, StructureFeature<?> structure) {
-//        final List<String> dims = new ArrayList<>();
-//        MinecraftServer server = world.getServer();
-//        server.getAllLevels().forEach(w->{
-//            // canGenerateStructure method doesn't exist in 1.18
-//            if (w.getChunkSource().getGenerator().getBiomeSource().canGenerateStructure(structure))
-//                dims.add(w.dimension().location().toString());
-//        });
-        return new ArrayList<>();
+        final List<String> dims = new ArrayList<>();
+        MinecraftServer server = world.getServer();
+        server.getAllLevels().forEach(w -> {
+            if (canGenerateStructure(w, structure))
+                dims.add(w.dimension().location().toString());
+        });
+        return dims;
+    }
+    
+    /**
+     * Polyfill for native canGenerateStructure method, which doesn't exist in 1.18
+     * w.getChunkSource().getGenerator().getBiomeSource().canGenerateStructure(structure)
+     * @param world player's server world
+     * @param structure the given structure
+     * @return can be generated or not in the given world
+     */
+    @Nonnull
+    private static Boolean canGenerateStructure(@Nonnull ServerLevel world, StructureFeature<?> structure) {
+        ChunkGenerator generator = world.getChunkSource().getGenerator();
+        StructureSettings settings = generator.getSettings();
+        if (structure == StructureFeature.STRONGHOLD)
+            return world.dimension() == Level.OVERWORLD;
+        Set<String> biomes = generator.getBiomeSource().possibleBiomes().stream()
+            .map(Biome::getRegistryName)
+            .filter(Objects::nonNull)
+            .map(ResourceLocation::toString)
+            .collect(Collectors.toSet());
+        for (ResourceKey<Biome> biome : settings.structures(structure).values()) {
+            if (biomes.contains(biome.location().toString()))
+                return true;
+        }
+        return false;
     }
     
     /**
