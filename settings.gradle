@@ -4,4 +4,4 @@ pluginManagement {
         mavenCentral()
     }
 }
-rootProject.name='structurescompass'
+rootProject.name='StructuresCompass'
