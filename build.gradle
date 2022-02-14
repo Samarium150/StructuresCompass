@@ -51,7 +51,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                structurescompass {
+                structures_compass {
                     source mainSourceSet
                 }
             }
@@ -61,7 +61,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                structurescompass {
+                structures_compass {
                     source mainSourceSet
                 }
             }
@@ -73,7 +73,7 @@ minecraft {
 // sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.75'
+    minecraft 'net.minecraftforge:forge:1.18.1-39.0.76'
 }
 
 compileJava {
