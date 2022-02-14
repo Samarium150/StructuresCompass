@@ -4,6 +4,7 @@ import io.github.samarium150.minecraft.mod.structures_compass.config.StructuresC
 import io.github.samarium150.minecraft.mod.structures_compass.network.StructuresCompassNetwork;
 import io.github.samarium150.minecraft.mod.structures_compass.network.packet.CompassSearchPacket;
 import io.github.samarium150.minecraft.mod.structures_compass.network.packet.RequestSyncPacket;
+import io.github.samarium150.minecraft.mod.structures_compass.util.GeneralUtils;
 import io.github.samarium150.minecraft.mod.structures_compass.util.ItemUtils;
 import io.github.samarium150.minecraft.mod.structures_compass.util.StructureUtils;
 import net.minecraft.client.resources.language.I18n;
@@ -162,11 +163,11 @@ public final class StructuresCompassItem extends Item {
         ResourceLocation registry = structure.getRegistryName();
         assert registry != null;
         setStructureName(registry.toString(), stack);
-        sendTranslatedMessage("string.structurescompass.msg_searching", player);
+        sendTranslatedMessage(GeneralUtils.prefix + "msg_searching", player);
         BlockPos pos = world.findNearestMapFeature(
             structure, player.blockPosition(), StructuresCompassConfig.radius.get(), isSkip(stack)
         );
-        sendTranslatedMessage("string.structurescompass.msg_done", player);
+        sendTranslatedMessage(GeneralUtils.prefix + "msg_done", player);
         if (pos == null) {
             ItemUtils.removeTag(stack, DIM_TAG);
             ItemUtils.removeTag(stack, POS_TAG);
@@ -218,12 +219,12 @@ public final class StructuresCompassItem extends Item {
             else {
                 String name = getStructureName(stack);
                 if (name == null) {
-                    sendMessage(I18n.get("string.structurescompass.msg_no_target"), player);
+                    sendMessage(I18n.get(GeneralUtils.prefix + "msg_no_target"), player);
                     return super.use(world, player, hand);
                 }
                 StructureFeature<?> structure = StructureFeature.STRUCTURES_REGISTRY.get(name.replace("minecraft:", ""));
                 if (structure == null) {
-                    sendMessage(I18n.get("string.structurescompass.msg_error_name") + name, player);
+                    sendMessage(I18n.get(GeneralUtils.prefix + "msg_error_name") + name, player);
                     return super.use(world, player, hand);
                 }
                 StructuresCompassNetwork.channel.sendToServer(
