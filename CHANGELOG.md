@@ -1,3 +1,11 @@
+<a name="1.18.1-1.3.1"></a>
+# 1.18.1-1.3.1 (2022/02/15)
+
+
+## Bug Fixes
+
+* correct translation keys ([bc3bbb0e](https://github.com/Samarium150/StructuresCompass/commits/bc3bbb0e))
+
 <a name="1.18.1-1.3.0"></a>
 # 1.18.1-1.3.0 (2022/02/12)
 
