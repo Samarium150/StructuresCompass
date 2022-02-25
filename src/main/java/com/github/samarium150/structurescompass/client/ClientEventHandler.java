@@ -26,7 +26,7 @@ public final class ClientEventHandler {
 
         if (minecraft.level == null ||
                 minecraft.player == null ||
-                minecraft.player.getMainHandItem().getItem() != ItemRegistry.STRUCTURES_COMPASS.get() ||
+                !minecraft.player.isHolding(ItemRegistry.STRUCTURES_COMPASS.get()) ||
                 minecraft.options.hideGui)
             return;
 
