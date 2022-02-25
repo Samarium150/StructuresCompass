@@ -1,3 +1,10 @@
+<a name="1.17.1-1.4.0"></a>
+# 1.17.1-1.4.0 (2022/02/26)
+
+
+## Features
+
+* display HUD when the compass is in offhand ([a605e733](https://github.com/Samarium150/StructuresCompass/commits/a605e733))
 <a name="1.17.1-1.3.0"></a>
 # 1.17.1-1.3.0 (2021/12/07)
 
