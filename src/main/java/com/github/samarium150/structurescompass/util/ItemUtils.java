@@ -89,4 +89,13 @@ public abstract class ItemUtils {
     public static ItemStack getHeldStructuresCompass(PlayerEntity player) {
         return getHeldItem(player, ItemRegistry.STRUCTURES_COMPASS.get());
     }
+    
+    /**
+     * Check whether the player holds the compass
+     * @param player the player entity
+     * @return <code>true</code> if the player is holding a compass;
+     */
+    public static boolean isHoldingStructuresCompass(PlayerEntity player) {
+        return !getHeldStructuresCompass(player).isEmpty();
+    }
 }
