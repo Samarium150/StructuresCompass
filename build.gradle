@@ -16,6 +16,7 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
+def prevVersion = '1.3.0'
 def baseVersion = '1.4.0'
 def minecraftVersion = '1.15.2'
 version = "${minecraftVersion}-${baseVersion}" as Object
@@ -97,6 +98,7 @@ jar.finalizedBy('reobfJar')
 changelog {
     appName "${project.name}"
     versionNum "${project.version}"
+    from "${minecraftVersion}-${prevVersion}"
     repoUrl "https://github.com/Samarium150/StructuresCompass"
     trackerUrl "https://github.com/Samarium150/StructuresCompass"
 }
