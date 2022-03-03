@@ -1,0 +1,43 @@
+{
+  "group": "tools",
+  "type": "minecraft:crafting_shaped",
+  "condition": "normal",
+  "pattern": [
+    "012",
+    "345",
+    "678"
+  ],
+  "key": {
+    "0": {
+      "tag": "structures_compass:dead_coral"
+    },
+    "1": {
+      "item": "minecraft:mossy_stone_bricks"
+    },
+    "2": {
+      "tag": "structures_compass:dead_coral"
+    },
+    "3": {
+      "item": "minecraft:mossy_stone_bricks"
+    },
+    "4": {
+      "item": "minecraft:compass"
+    },
+    "5": {
+      "item": "minecraft:mossy_stone_bricks"
+    },
+    "6": {
+      "tag": "structures_compass:dead_coral"
+    },
+    "7": {
+      "item": "minecraft:mossy_stone_bricks"
+    },
+    "8": {
+      "tag": "structures_compass:dead_coral"
+    }
+  },
+  "result": {
+    "item": "structures_compass:structures_compass",
+    "count": 1
+  }
+}
