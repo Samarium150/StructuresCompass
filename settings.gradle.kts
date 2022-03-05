@@ -11,3 +11,4 @@ pluginManagement {
         id("fabric-loom").version(loomVersion)
     }
 }
+rootProject.name = "StructuresCompass"

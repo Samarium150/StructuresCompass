@@ -14,17 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-package io.github.samarium150.minecraft.mod.structures_compass
+package io.github.samarium150.minecraft.mod.structures_compass.client.util.sort
 
-import io.github.samarium150.minecraft.mod.structures_compass.init.CommandRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.init.ItemRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.network.StructuresCompassServerNetwork
-import net.fabricmc.api.ModInitializer
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
+import net.minecraft.world.gen.feature.StructureFeature
 
-object StructuresCompass: ModInitializer {
-    override fun onInitialize() {
-        CommandRegistry.init()
-        ItemRegistry.init()
-        StructuresCompassServerNetwork.init()
-    }
+@Environment(EnvType.CLIENT)
+sealed interface Category : Comparator<StructureFeature<*>> {
+
+    val localizedName: String
+
+    override fun compare(s1: StructureFeature<*>, s2: StructureFeature<*>): Int
+
+    fun next(): Category
+
 }

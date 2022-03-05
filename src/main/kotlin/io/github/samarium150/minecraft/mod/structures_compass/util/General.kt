@@ -14,17 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-package io.github.samarium150.minecraft.mod.structures_compass
+package io.github.samarium150.minecraft.mod.structures_compass.util
 
-import io.github.samarium150.minecraft.mod.structures_compass.init.CommandRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.init.ItemRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.network.StructuresCompassServerNetwork
-import net.fabricmc.api.ModInitializer
+import net.minecraft.client.MinecraftClient
 
-object StructuresCompass: ModInitializer {
-    override fun onInitialize() {
-        CommandRegistry.init()
-        ItemRegistry.init()
-        StructuresCompassServerNetwork.init()
+const val MOD_ID = "structures_compass"
+
+const val prefix = "string.${MOD_ID}."
+
+val minecraftClient: MinecraftClient
+    get() = MinecraftClient.getInstance()
+
+@SafeVarargs
+fun <T> swap(vararg args: T): T {
+    return args[0]
+}
+
+data class Rect(
+    var left: Int,
+    var top: Int,
+    var right: Int,
+    var bottom: Int
+) {
+    fun sanitize() : Rect {
+        if (left < right)
+            left = swap(right, left.also { right = it })
+        if (top < bottom)
+            top = swap(bottom, top.also { bottom = it })
+        return this
     }
 }

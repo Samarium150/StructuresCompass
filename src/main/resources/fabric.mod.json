@@ -17,12 +17,14 @@
   "icon": "logo.gif",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      {
-        "adapter": "kotlin",
-        "value": "io.github.samarium150.minecraft.mod.structures_compass.StructuresCompass"
-      }
-    ]
+    "main": [{
+      "adapter": "kotlin",
+      "value": "io.github.samarium150.minecraft.mod.structures_compass.StructuresCompass"
+    }],
+    "client": [{
+      "adapter": "kotlin",
+      "value": "io.github.samarium150.minecraft.mod.structures_compass.client.StructuresCompassClient"
+    }]
   },
   "mixins": [
     "structures_compass.mixins.json"

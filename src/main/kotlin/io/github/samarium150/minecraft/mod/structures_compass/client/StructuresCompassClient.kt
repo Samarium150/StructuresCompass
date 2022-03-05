@@ -14,17 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-package io.github.samarium150.minecraft.mod.structures_compass
 
-import io.github.samarium150.minecraft.mod.structures_compass.init.CommandRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.init.ItemRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.network.StructuresCompassServerNetwork
-import net.fabricmc.api.ModInitializer
+package io.github.samarium150.minecraft.mod.structures_compass.client
 
-object StructuresCompass: ModInitializer {
-    override fun onInitialize() {
-        CommandRegistry.init()
-        ItemRegistry.init()
-        StructuresCompassServerNetwork.init()
+import io.github.samarium150.minecraft.mod.structures_compass.client.init.HudRegistry
+import io.github.samarium150.minecraft.mod.structures_compass.client.init.ItemPredicateRegistry
+import io.github.samarium150.minecraft.mod.structures_compass.client.network.StructuresCompassClientNetwork
+import net.fabricmc.api.ClientModInitializer
+
+object StructuresCompassClient : ClientModInitializer {
+    override fun onInitializeClient() {
+        ItemPredicateRegistry.init()
+        HudRegistry.init()
+        StructuresCompassClientNetwork.init()
     }
 }

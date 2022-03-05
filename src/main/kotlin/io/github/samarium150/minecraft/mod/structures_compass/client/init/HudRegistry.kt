@@ -14,17 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-package io.github.samarium150.minecraft.mod.structures_compass
+package io.github.samarium150.minecraft.mod.structures_compass.client.init
 
-import io.github.samarium150.minecraft.mod.structures_compass.init.CommandRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.init.ItemRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.network.StructuresCompassServerNetwork
-import net.fabricmc.api.ModInitializer
+import io.github.samarium150.minecraft.mod.structures_compass.client.gui.hud.StructuresCompassHud
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 
-object StructuresCompass: ModInitializer {
-    override fun onInitialize() {
-        CommandRegistry.init()
-        ItemRegistry.init()
-        StructuresCompassServerNetwork.init()
+object HudRegistry {
+    fun init() {
+        HudRenderCallback.EVENT.register { matrixStack, _ ->
+            StructuresCompassHud.render(matrixStack)
+        }
     }
 }

@@ -5,7 +5,7 @@
   "string.structures_compass.start_searching": "开始搜索",
   "string.structures_compass.search": "搜索",
   "string.structures_compass.sort_by": "排序",
-  "string.structures_compass.skip_existing_chunks": "略过已存区块",
+  "string.structures_compass.skip_existing_chunks": "略过已存在的区块",
 
   "string.structures_compass.name": "名称",
   "string.structures_compass.source": "来源",

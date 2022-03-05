@@ -14,17 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-package io.github.samarium150.minecraft.mod.structures_compass
+package io.github.samarium150.minecraft.mod.structures_compass.client.util
 
-import io.github.samarium150.minecraft.mod.structures_compass.init.CommandRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.init.ItemRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.network.StructuresCompassServerNetwork
-import net.fabricmc.api.ModInitializer
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
+import net.minecraft.client.resource.language.I18n
+import net.minecraft.util.Identifier
+import java.util.*
 
-object StructuresCompass: ModInitializer {
-    override fun onInitialize() {
-        CommandRegistry.init()
-        ItemRegistry.init()
-        StructuresCompassServerNetwork.init()
-    }
+@Environment(EnvType.CLIENT)
+fun Identifier.getLocalizedStructureName(): String {
+    return I18n.translate("structure.${this.toString().replace(':', '.').lowercase(Locale.ROOT)}")
+}
+
+@Environment(EnvType.CLIENT)
+fun Identifier.getLocalizedDimensionName(): String {
+    return I18n.translate("dimension.${this.toString().replace(':', '.').lowercase(Locale.ROOT)}")
 }
