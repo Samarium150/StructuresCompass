@@ -6,7 +6,7 @@ plugins {
 }
 
 base {
-    archivesName.set(project.property("archivesBaseName") as String)
+    archivesName.set("${project.property("archivesBaseName")}-fabric-${project.property("minecraftVersion")}")
 }
 
 version = project.property("modVersion") as String
