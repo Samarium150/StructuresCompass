@@ -16,6 +16,7 @@
  */
 package io.github.samarium150.minecraft.mod.structures_compass.util
 
+import io.github.samarium150.minecraft.mod.structures_compass.config.StructuresCompassConfig
 import io.github.samarium150.minecraft.mod.structures_compass.item.StructuresCompassItem
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
@@ -75,11 +76,12 @@ fun ItemStack.removeTag(tag: String): ItemStack {
 
 fun ItemStack.search(player: ServerPlayerEntity, structureId: Identifier) {
     val structure = structureId.getStructureFeature()
+    val radius = StructuresCompassConfig.configData.common.radius
     if (structure != null) {
         val world = player.serverWorld
         setStructure(structureId)
         player.sendMessage(TranslatableText("${prefix}msg_searching"), false)
-        val pos = world.locateStructure(structure, player.blockPos, 10000, getSkip())
+        val pos = world.locateStructure(structure, player.blockPos, radius, getSkip())
         player.sendMessage(TranslatableText("${prefix}msg_done"), false)
         if (pos == null) {
             removeTag(StructuresCompassItem.DIM_TAG)

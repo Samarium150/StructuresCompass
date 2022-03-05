@@ -18,6 +18,8 @@ package io.github.samarium150.minecraft.mod.structures_compass.client.util
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
+import io.github.samarium150.minecraft.mod.structures_compass.config.HudSide
+import io.github.samarium150.minecraft.mod.structures_compass.config.StructuresCompassConfig
 import io.github.samarium150.minecraft.mod.structures_compass.util.Rect
 import io.github.samarium150.minecraft.mod.structures_compass.util.minecraftClient
 import net.fabricmc.api.EnvType
@@ -34,24 +36,22 @@ fun TextRenderer.drawConfiguredStringOnHud(
     string: String, xOffset: Int, yOffset: Int,
     color: Int, relLineOffset: Int
 ) {
-    // TODO: replace 1 with StructuresCompassConfig.overlayLineOffset
-    val configuredYOffset = yOffset + (relLineOffset + 1) * 9
-    // TODO: replace ture with StructuresCompassConfig.hudPosition
-    if (true)
+    val clientConfig = StructuresCompassConfig.configData.client
+    val configuredYOffset = yOffset + (relLineOffset + clientConfig.overlayLineOffset) * 9
+    if (clientConfig.HudPosition == HudSide.RIGHT)
         draw(
             matrixStack,
             string,
-            (xOffset + 7 - 5).toFloat(), // TODO: replace 7 with StructuresCompassConfig.xOffset
-            (configuredYOffset + 16 - 14).toFloat(), // TODO: replace 16 with StructuresCompassConfig.yOffset
+            (minecraftClient.window.scaledWidth - getWidth(string) - xOffset - clientConfig.xOffset + 5).toFloat(),
+            (configuredYOffset + clientConfig.yOffset - 14).toFloat(),
             color
         )
     else
         draw(
             matrixStack,
             string,
-            // TODO: replace 7 with StructuresCompassConfig.xOffset
-            (minecraftClient.window.scaledWidth - getWidth(string) - xOffset - 7 + 5).toFloat(),
-            (configuredYOffset + 0 - 14).toFloat(), // TODO: replace 0 with StructuresCompassConfig.yOffset
+            (xOffset + clientConfig.xOffset - 5).toFloat(),
+            (configuredYOffset + clientConfig.yOffset - 14).toFloat(),
             color
         )
 }

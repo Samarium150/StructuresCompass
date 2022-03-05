@@ -16,6 +16,8 @@
  */
 package io.github.samarium150.minecraft.mod.structures_compass.util
 
+import io.github.samarium150.minecraft.mod.structures_compass.config.FilterMode
+import io.github.samarium150.minecraft.mod.structures_compass.config.StructuresCompassConfig
 import io.github.samarium150.minecraft.mod.structures_compass.data.StructuresCompassData
 import net.minecraft.entity.Entity
 import net.minecraft.server.world.ServerWorld
@@ -63,4 +65,16 @@ fun BlockPos.getDistanceVector(entity: Entity): Vec3d {
 
 fun Vec3d.getLength(): Double {
     return sqrt(this.x * this.x + this.y * this.y + this.z * this.z)
+}
+
+fun Identifier.isBanned(): Boolean {
+    val flag = StructuresCompassConfig.configData.common.filterMode == FilterMode.WHITELIST
+    val filters = StructuresCompassConfig.configData.common.filterList
+    for (filter in filters) {
+        val matching = this.toString().matches(filter.convertToRegex())
+        if (flag && matching) return false
+        else if (matching)
+            return true
+    }
+    return flag
 }

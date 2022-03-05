@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-
 package io.github.samarium150.minecraft.mod.structures_compass.data
 
 import io.github.samarium150.minecraft.mod.structures_compass.util.getDimensions
 import io.github.samarium150.minecraft.mod.structures_compass.util.getIdentifier
+import io.github.samarium150.minecraft.mod.structures_compass.util.isBanned
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
@@ -29,13 +29,14 @@ object StructuresCompassData {
     val allowedStructures: MutableList<StructureFeature<*>> = mutableListOf()
     val structuresDimensionsMap: MutableMap<StructureFeature<*>, List<Identifier>> = mutableMapOf()
 
-    init {
+    fun init() {
         readAllowedStructures()
     }
 
     private fun readAllowedStructures() {
         Registry.STRUCTURE_FEATURE.forEach {
-            if (it.getIdentifier() != null)
+            val id = it.getIdentifier()
+            if (id != null && !id.isBanned())
                 allowedStructures.add(it)
         }
     }

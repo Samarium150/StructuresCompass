@@ -44,3 +44,17 @@ data class Rect(
         return this
     }
 }
+
+fun String.convertToRegex(): Regex {
+    val regex = StringBuilder("^")
+    for (i in this.indices) {
+        when (val c = this[i]) {
+            '*' -> regex.append(".*")
+            '?' -> regex.append(".")
+            '.' -> regex.append("\\.")
+            else -> regex.append(c)
+        }
+    }
+    regex.append("$")
+    return regex.toString().toRegex()
+}

@@ -19,11 +19,14 @@ package io.github.samarium150.minecraft.mod.structures_compass.client.gui.hud
 import io.github.samarium150.minecraft.mod.structures_compass.client.util.drawConfiguredStringOnHud
 import io.github.samarium150.minecraft.mod.structures_compass.client.util.getLocalizedDimensionName
 import io.github.samarium150.minecraft.mod.structures_compass.client.util.getLocalizedStructureName
+import io.github.samarium150.minecraft.mod.structures_compass.config.ClientConfig
+import io.github.samarium150.minecraft.mod.structures_compass.config.StructuresCompassConfig
 import io.github.samarium150.minecraft.mod.structures_compass.init.ItemRegistry
 import io.github.samarium150.minecraft.mod.structures_compass.util.*
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.font.TextRenderer
+import net.minecraft.client.gui.screen.ChatScreen
 import net.minecraft.client.resource.language.I18n
 import net.minecraft.client.util.math.MatrixStack
 
@@ -33,8 +36,12 @@ object StructuresCompassHud {
     private val textRenderer: TextRenderer
         get() = minecraftClient.textRenderer
 
+    private val config: ClientConfig
+        get() = StructuresCompassConfig.configData.client
+
     fun render(matrixStack: MatrixStack) {
-        if (minecraftClient.currentScreen == null) {
+        if (minecraftClient.currentScreen == null ||
+            (config.displayWithChatOpen && minecraftClient.currentScreen is ChatScreen)) {
             val player = minecraftClient.player
             if (player != null) {
                 val itemStack = if (player.mainHandStack.item == ItemRegistry.STRUCTURES_COMPASS) {
@@ -78,12 +85,12 @@ object StructuresCompassHud {
                     )
                     relLineOffset++
 
-                    // TODO: Add if statement for checking information level
-                    textRenderer.drawConfiguredStringOnHud(
-                        matrixStack, I18n.translate("${prefix}hud_pos") +
-                            " [${position.x}, ${if (position.y == 0) "X" else "${position.y}"}, ${position.z}]",
-                        5, 5, 0x4AFF4A, ++relLineOffset
-                    )
+                    if (config.HudInfoLevel == 3)
+                        textRenderer.drawConfiguredStringOnHud(
+                            matrixStack, I18n.translate("${prefix}hud_pos") +
+                                " [${position.x}, ${if (position.y == 0) "X" else "${position.y}"}, ${position.z}]",
+                            5, 5, 0x4AFF4A, ++relLineOffset
+                        )
 
                     if (player.world.registryKey.value == dimension) {
                         val distanceVector = position.getDistanceVector(player)
@@ -91,37 +98,40 @@ object StructuresCompassHud {
                         val y = distanceVector.y
                         val z = distanceVector.z
                         val distance = distanceVector.getLength()
-                        if (x > 0.3)
-                            textRenderer.drawConfiguredStringOnHud(
-                                matrixStack, "${I18n.translate("${prefix}hud_east")} $x",
-                                5, 5, 0xFFFFFF, ++relLineOffset
-                            )
-                        else if (x < -0.3)
-                            textRenderer.drawConfiguredStringOnHud(
-                                matrixStack, "${I18n.translate("${prefix}hud_west")} ${-x}",
-                                5, 5, 0xFFFFFF, ++relLineOffset
-                            )
-                        if (z > 0.3)
-                            textRenderer.drawConfiguredStringOnHud(
-                                matrixStack, "${I18n.translate("${prefix}hud_south")} $z",
-                                5, 5, 0xFFFFFF, ++relLineOffset
-                            )
-                        else if (z < -0.3)
-                            textRenderer.drawConfiguredStringOnHud(
-                                matrixStack, "${I18n.translate("${prefix}hud_north")} ${-z}",
-                                5, 5, 0xFFFFFF, ++relLineOffset
-                            )
-                        if (y > 0.3)
-                            textRenderer.drawConfiguredStringOnHud(
-                                matrixStack, "${I18n.translate("${prefix}hud_up")} $y",
-                                5, 5, 0xFFFFFF, ++relLineOffset
-                            )
-                        else if (y < -0.3)
-                            textRenderer.drawConfiguredStringOnHud(
-                                matrixStack, "${I18n.translate("${prefix}hud_down")} ${-y}",
-                                5, 5, 0xFFFFFF, ++relLineOffset
-                            )
-                        if (relLineOffset > 6 || distance > 0.5) {
+                        if (config.HudInfoLevel == 3) {
+                            if (x > 0.3)
+                                textRenderer.drawConfiguredStringOnHud(
+                                    matrixStack, "${I18n.translate("${prefix}hud_east")} $x",
+                                    5, 5, 0xFFFFFF, ++relLineOffset
+                                )
+                            else if (x < -0.3)
+                                textRenderer.drawConfiguredStringOnHud(
+                                    matrixStack, "${I18n.translate("${prefix}hud_west")} ${-x}",
+                                    5, 5, 0xFFFFFF, ++relLineOffset
+                                )
+                            if (z > 0.3)
+                                textRenderer.drawConfiguredStringOnHud(
+                                    matrixStack, "${I18n.translate("${prefix}hud_south")} $z",
+                                    5, 5, 0xFFFFFF, ++relLineOffset
+                                )
+                            else if (z < -0.3)
+                                textRenderer.drawConfiguredStringOnHud(
+                                    matrixStack, "${I18n.translate("${prefix}hud_north")} ${-z}",
+                                    5, 5, 0xFFFFFF, ++relLineOffset
+                                )
+                            if (y > 0.3)
+                                textRenderer.drawConfiguredStringOnHud(
+                                    matrixStack, "${I18n.translate("${prefix}hud_up")} $y",
+                                    5, 5, 0xFFFFFF, ++relLineOffset
+                                )
+                            else if (y < -0.3)
+                                textRenderer.drawConfiguredStringOnHud(
+                                    matrixStack, "${I18n.translate("${prefix}hud_down")} ${-y}",
+                                    5, 5, 0xFFFFFF, ++relLineOffset
+                                )
+                        }
+                        if ((config.HudInfoLevel == 3 && relLineOffset > 6) ||
+                            (config.HudInfoLevel >= 3 && distance > config.closedEnough)) {
                             relLineOffset++
                             textRenderer.drawConfiguredStringOnHud(
                                 matrixStack, "${I18n.translate("${prefix}hud_distance")} %.3f".format(distance),
