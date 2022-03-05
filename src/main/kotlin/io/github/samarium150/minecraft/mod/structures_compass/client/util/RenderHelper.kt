@@ -27,6 +27,7 @@ import net.fabricmc.api.Environment
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.render.BufferBuilder
 import net.minecraft.client.render.Tessellator
+import net.minecraft.client.render.VertexFormat.DrawMode
 import net.minecraft.client.render.VertexFormats
 import net.minecraft.client.util.math.MatrixStack
 
@@ -58,7 +59,7 @@ fun TextRenderer.drawConfiguredStringOnHud(
 
 @Environment(EnvType.CLIENT)
 fun BufferBuilder.update(startX: Int, startY: Int, endX: Int, endY: Int) {
-    begin(7, VertexFormats.POSITION)
+    begin(DrawMode.QUADS, VertexFormats.POSITION)
     vertex(startX.toDouble(), endY.toDouble(), 0.0).next()
     vertex(endX.toDouble(), endY.toDouble(), 0.0).next()
     vertex(endX.toDouble(), startY.toDouble(), 0.0).next()
@@ -86,8 +87,7 @@ fun drawRect(left: Int, top: Int, right: Int, bottom: Int, color: Int) {
         GlStateManager.SrcFactor.ONE,
         GlStateManager.DstFactor.ZERO
     )
-    @Suppress("DEPRECATION")
-    RenderSystem.color4f(red, green, blue, alpha)
+    RenderSystem.setShaderColor(red, green, blue, alpha)
     buffer.update(sanitizedLeft, sanitizedTop, sanitizedRight, sanitizedBottom)
     tessellator.draw()
     RenderSystem.enableTexture()

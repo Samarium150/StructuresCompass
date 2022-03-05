@@ -29,48 +29,48 @@ import kotlin.math.roundToInt
 private val logger = LogManager.getLogger("${MOD_ID}/ISH")
 
 fun ItemStack.setStructure(structure: Identifier): ItemStack {
-    this.orCreateTag.putString(StructuresCompassItem.STRUCTURE_TAG, structure.toString())
+    this.orCreateNbt.putString(StructuresCompassItem.STRUCTURE_TAG, structure.toString())
     return this
 }
 
 fun ItemStack.getStructure(): Identifier? {
-    val name = this.orCreateTag.getString(StructuresCompassItem.STRUCTURE_TAG)
+    val name = this.orCreateNbt.getString(StructuresCompassItem.STRUCTURE_TAG)
     return if (name.isNotEmpty()) Identifier(name) else null
 }
 
 fun ItemStack.setDimension(dimension: Identifier): ItemStack {
-    this.orCreateTag.putString(StructuresCompassItem.DIM_TAG, dimension.toString())
+    this.orCreateNbt.putString(StructuresCompassItem.DIM_TAG, dimension.toString())
     return this
 }
 
 fun ItemStack.getDimension(): Identifier? {
-    val name = this.orCreateTag.getString(StructuresCompassItem.DIM_TAG)
+    val name = this.orCreateNbt.getString(StructuresCompassItem.DIM_TAG)
     return if (name.isNotEmpty()) Identifier(name) else null
 }
 
 fun ItemStack.setPos(pos: BlockPos): ItemStack {
-    this.orCreateTag.putLong(StructuresCompassItem.POS_TAG, pos.asLong())
+    this.orCreateNbt.putLong(StructuresCompassItem.POS_TAG, pos.asLong())
     return this
 }
 
 fun ItemStack.getPos(): BlockPos? {
-    val tag = this.orCreateTag
+    val tag = this.orCreateNbt
     return if (tag.contains(StructuresCompassItem.POS_TAG))
         BlockPos.fromLong(tag.getLong(StructuresCompassItem.POS_TAG))
     else null
 }
 
 fun ItemStack.setSkip(skip: Boolean): ItemStack {
-    this.orCreateTag.putBoolean(StructuresCompassItem.SKIP_TAG, skip)
+    this.orCreateNbt.putBoolean(StructuresCompassItem.SKIP_TAG, skip)
     return this
 }
 
 fun ItemStack.getSkip(): Boolean {
-    return this.orCreateTag.getBoolean(StructuresCompassItem.SKIP_TAG)
+    return this.orCreateNbt.getBoolean(StructuresCompassItem.SKIP_TAG)
 }
 
 fun ItemStack.removeTag(tag: String): ItemStack {
-    this.tag?.remove(tag)
+    this.nbt?.remove(tag)
     return this
 }
 

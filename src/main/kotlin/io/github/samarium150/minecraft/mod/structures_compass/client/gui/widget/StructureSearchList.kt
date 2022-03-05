@@ -54,7 +54,7 @@ class StructureSearchList(
     }
 
     override fun isSelectedEntry(slotIndex: Int): Boolean {
-        return if (slotIndex >= 0 && slotIndex < children().size) children()[slotIndex].equals(selected) else false
+        return if (slotIndex >= 0 && slotIndex < children().size) children()[slotIndex].equals(selectedOrNull) else false
     }
 
     private fun getRowBottom(entryIndex: Int): Int {
@@ -100,8 +100,8 @@ class StructureSearchList(
         renderList(matrixStack, rowLeft, top + 4 - scrollAmount.toInt(), mouseX, mouseY, partialTicks)
     }
 
-    private fun selectStructure(entry: StructureSearchEntry?) {
-        selected = entry
+    fun selectStructure(entry: StructureSearchEntry?) {
+        setSelected(entry)
         screen.selectStructure(entry)
     }
 
@@ -122,7 +122,7 @@ class StructureSearchList(
     }
 
     fun restoreScrollAmount() {
-        if (selected != null) {
+        if (selectedOrNull != null) {
             changeFocus(true)
             scrollAmount += itemHeight * 2
         }

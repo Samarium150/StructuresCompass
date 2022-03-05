@@ -61,7 +61,7 @@ class SyncPacket(
                 }
             StructuresCompassData.update(allowedStructures, structuresDimensionsMap)
             client.execute {
-                client.openScreen(StructuresCompassScreen(itemStack))
+                client.setScreen(StructuresCompassScreen(itemStack))
             }
         }
     }

@@ -6,7 +6,7 @@ plugins {
 }
 
 base {
-    archivesName.set("${project.property("archivesBaseName")}-fabric-${project.property("minecraftVersion")}")
+    archivesName.set("${project.property("archivesBaseName")}")
 }
 
 version = project.property("modVersion") as String
@@ -25,14 +25,14 @@ dependencies {
 }
 
 tasks {
-    val javaVersion = JavaVersion.VERSION_1_8
+    val javaVersion = JavaVersion.VERSION_16
 
     withType<JavaCompile> {
         options.encoding = "UTF-8"
         sourceCompatibility = javaVersion.toString()
         targetCompatibility = javaVersion.toString()
         if (JavaVersion.current().isJava9Compatible) {
-            options.release.set(8)
+            options.release.set(javaVersion.toString().toInt())
         }
     }
 

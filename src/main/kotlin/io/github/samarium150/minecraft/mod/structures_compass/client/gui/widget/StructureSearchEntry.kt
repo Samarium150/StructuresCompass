@@ -27,6 +27,7 @@ import net.minecraft.client.sound.PositionedSoundInstance
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 import net.minecraft.util.Util
@@ -49,7 +50,7 @@ class StructureSearchEntry(
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         return if (button == 0) {
-            searchList.selected = this
+            searchList.selectStructure(this)
             return if (Util.getMeasuringTimeMs() - lastClickTime < 250L) {
                 search()
                 true
@@ -94,7 +95,10 @@ class StructureSearchEntry(
             (y + 14 + client.textRenderer.fontHeight).toFloat(),
             0x808080
         )
-        @Suppress("DEPRECATION")
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f)
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+    }
+
+    override fun getNarration(): Text {
+        return LiteralText(structure.getIdentifier()!!.getLocalizedStructureName())
     }
 }

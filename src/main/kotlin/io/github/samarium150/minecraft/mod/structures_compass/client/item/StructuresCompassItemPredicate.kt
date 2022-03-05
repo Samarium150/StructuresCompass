@@ -20,7 +20,7 @@ import io.github.samarium150.minecraft.mod.structures_compass.util.getDimension
 import io.github.samarium150.minecraft.mod.structures_compass.util.getPos
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.item.ModelPredicateProvider
+import net.minecraft.client.item.UnclampedModelPredicateProvider
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.Entity
 import net.minecraft.entity.ItemEntity
@@ -33,7 +33,7 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 
 @Environment(EnvType.CLIENT)
-object StructuresCompassItemPredicate : ModelPredicateProvider {
+object StructuresCompassItemPredicate : UnclampedModelPredicateProvider {
 
     data class AngleInterpolator(
         private var rotation: Double = 0.0,
@@ -74,7 +74,16 @@ object StructuresCompassItemPredicate : ModelPredicateProvider {
         return MathHelper.atan2(vector.z - entity.pos.z, vector.x - entity.pos.x)
     }
 
-    override fun call(stack: ItemStack?, clientWorld: ClientWorld?, livingEntity: LivingEntity?): Float {
+    private fun scatter(seed: Int): Int {
+        return seed * 1327217883
+    }
+
+    override fun unclampedCall(
+        stack: ItemStack?,
+        clientWorld: ClientWorld?,
+        livingEntity: LivingEntity?,
+        seed: Int
+    ): Float {
         val entity: Entity = (livingEntity ?: stack?.holder) ?: return 0.0f
         val world: ClientWorld = clientWorld ?: entity.world as ClientWorld
         val pos = stack?.getPos()
@@ -85,13 +94,13 @@ object StructuresCompassItemPredicate : ModelPredicateProvider {
             } else if (entity is ItemFrameEntity) {
                 getFrameRotation(entity)
             } else if (entity is ItemEntity) {
-                (180.0f - entity.method_27314(0.5f) / 6.2831855f * 360.0f).toDouble()
+                (180.0f - entity.getRotation(0.5f) / 6.2831855f * 360.0f).toDouble()
             } else livingEntity?.bodyYaw?.toDouble() ?: 0.0
             d1 = MathHelper.floorMod(d1 / 360.0, 1.0)
             val d2 = getAngle(Vec3d.ofCenter(pos), entity) / (2 * Math.PI)
             val d3 = if (flag) d2 + r1.update(world, 0.5 - (d1 - 0.25)) else 0.5 - (d1 - 0.25 - d2)
             return MathHelper.floorMod(d3, 1.0).toFloat()
         }
-        return MathHelper.floorMod((r2.update(world, Math.random()) + stack.hashCode() / 2.14748365E9), 1.0).toFloat()
+        return MathHelper.floorMod((r2.update(world, Math.random()) + scatter(seed) / 2.14748365E9), 1.0).toFloat()
     }
 }

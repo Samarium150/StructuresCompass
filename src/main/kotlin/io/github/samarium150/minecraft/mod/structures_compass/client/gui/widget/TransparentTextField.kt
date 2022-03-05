@@ -173,8 +173,7 @@ class TransparentTextField(
             Rect(startX, startY, endX, endY).sanitize()
         val tessellator = Tessellator.getInstance()
         val buffer = tessellator.buffer
-        @Suppress("DEPRECATION")
-        RenderSystem.color4f(0.0f, 0.0f, 255.0f, 255.0f)
+        RenderSystem.setShaderColor(0.0f, 0.0f, 255.0f, 255.0f)
         RenderSystem.disableTexture()
         RenderSystem.enableColorLogicOp()
         RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE)

@@ -54,8 +54,8 @@ class StructuresCompassScreen(private val itemStack: ItemStack) : Screen(
     private var selected: StructureFeature<*>? = null
 
     private fun setup() {
-        buttons.clear()
-        startSearchButton = addButton(
+        clearChildren()
+        startSearchButton = addDrawableChild(
             TransparentButton(
                 10,
                 40,
@@ -63,9 +63,9 @@ class StructuresCompassScreen(private val itemStack: ItemStack) : Screen(
                 20,
                 TranslatableText("${prefix}start_searching")
             ) {
-                selectionList.selected?.search()
+                selectionList.selectedOrNull?.search()
             })
-        sortByButton = addButton(
+        sortByButton = addDrawableChild(
             TransparentButton(
                 10,
                 65,
@@ -77,24 +77,26 @@ class StructuresCompassScreen(private val itemStack: ItemStack) : Screen(
                 sortByButton.message = TranslatableText("${prefix}sort_by").append(": ${sortingCategory.localizedName}")
                 selectionList.refresh()
             })
-        skipExistingChunksButton = addButton(TransparentButton(
+        skipExistingChunksButton = addDrawableChild(TransparentButton(
             10, 90, 110, 20,
             TranslatableText("${prefix}skip_existing_chunks").append(": $skip")
         ) {
             skip = !skip
             skipExistingChunksButton.message = TranslatableText("${prefix}skip_existing_chunks").append(": $skip")
         })
-        addButton(TransparentButton(
+        addDrawableChild(TransparentButton(
             10, height - 30, 110, 20,
             TranslatableText("gui.cancel")
         ) {
-            minecraftClient.currentScreen = null
+            minecraftClient.setScreen(null)
         })
-        searchTextField = addChild(TransparentTextField(
-            textRenderer,
-            130, 10, 140, 20,
-            TranslatableText("${prefix}search")
-        ))
+        searchTextField = addDrawableChild(
+            TransparentTextField(
+                textRenderer,
+                130, 10, 140, 20,
+                TranslatableText("${prefix}search")
+            )
+        )
         startSearchButton.active = false
     }
 
@@ -155,7 +157,7 @@ class StructuresCompassScreen(private val itemStack: ItemStack) : Screen(
             selectionList.changeFocus(true)
             selectionList.restoreScrollAmount()
         }
-        addChild(selectionList)
+        addDrawableChild(selectionList)
     }
 
     override fun tick() {
