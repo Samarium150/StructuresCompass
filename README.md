@@ -57,8 +57,8 @@ We think the compass is too op, so we increase the crafting difficulty to balanc
 ## Further Development
 
 We're too busy to develop, so we just list some possibilities
-- [ ] Port to another version like 1.12.2
-- [ ] Port to Fabric
+- [ ] ~~Port to older version like 1.12.2~~
+- [x] Port to Fabric
 
 ## Contribute
 
@@ -78,7 +78,7 @@ and your translations should also follow the same style.
 ## License
 
 As stated in the introduction, part of our code is from [Nature's Compass](https://github.com/MattCzyr/NaturesCompass), 
-which is under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0) 
+which is under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0),
 and we've annotated it in the doc string. 
 Because CC BY-NC-SA 4.0 is not a software license, we choose [GNU General Public License 3.0](https://www.gnu.org/licenses/gpl-3.0.html) 
 for other parts of the code to discourage commercial usage.
