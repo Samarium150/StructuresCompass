@@ -27,6 +27,7 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayNetworkHandler
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.Identifier
 
 class RequestSyncPacket : PacketByteBuf(Unpooled.buffer()) {
@@ -43,7 +44,7 @@ class RequestSyncPacket : PacketByteBuf(Unpooled.buffer()) {
             responseSender: PacketSender
         ) {
             server.execute {
-                StructuresCompassData.readStructureDimensionMap(player.serverWorld)
+                StructuresCompassData.readStructureDimensionMap(player.world as ServerWorld)
                 ServerPlayNetworking.send(player, SyncPacket.ID, SyncPacket(
                     player.mainHandStack,
                     StructuresCompassData.allowedStructures,

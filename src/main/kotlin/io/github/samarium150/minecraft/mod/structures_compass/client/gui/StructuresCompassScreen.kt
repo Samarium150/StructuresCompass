@@ -172,7 +172,7 @@ class StructuresCompassScreen(private val itemStack: ItemStack) : Screen(
         super.render(matrices, mouseX, mouseY, delta)
     }
 
-    override fun isPauseScreen(): Boolean {
+    override fun shouldPause(): Boolean {
         return false
     }
 

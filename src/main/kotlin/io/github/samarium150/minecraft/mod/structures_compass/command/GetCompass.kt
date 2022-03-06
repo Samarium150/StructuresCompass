@@ -47,8 +47,8 @@ object GetCompass {
                         .requires { it.hasPermissionLevel(2) }
                         .apply {
                             Registry.STRUCTURE_FEATURE.forEach {
-                                then(CommandManager.literal(it.name)
-                                    .executes { context -> execute(context, it.name) }
+                                then(CommandManager.literal(it.toString())
+                                    .executes { context -> execute(context, it.toString()) }
                                 )
                             }
                         }

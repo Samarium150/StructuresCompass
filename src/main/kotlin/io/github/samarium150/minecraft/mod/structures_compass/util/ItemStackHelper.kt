@@ -20,6 +20,7 @@ import io.github.samarium150.minecraft.mod.structures_compass.config.StructuresC
 import io.github.samarium150.minecraft.mod.structures_compass.item.StructuresCompassItem
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
@@ -78,7 +79,7 @@ fun ItemStack.search(player: ServerPlayerEntity, structureId: Identifier) {
     val structure = structureId.getStructureFeature()
     val radius = StructuresCompassConfig.configData.common.radius
     if (structure != null) {
-        val world = player.serverWorld
+        val world = player.world as ServerWorld
         setStructure(structureId)
         player.sendMessage(TranslatableText("${prefix}msg_searching"), false)
         val pos = world.locateStructure(structure, player.blockPos, radius, getSkip())

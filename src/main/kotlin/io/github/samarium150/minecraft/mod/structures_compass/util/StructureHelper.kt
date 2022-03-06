@@ -25,6 +25,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
+import net.minecraft.world.World
 import net.minecraft.world.gen.feature.StructureFeature
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
@@ -44,12 +45,24 @@ fun StructureFeature<*>.getNamespace(): String? {
 fun StructureFeature<*>.getDimensions(world: ServerWorld): List<Identifier> {
     val dimensions = mutableListOf<Identifier>()
     world.server.worlds.forEach {
-        val generator = it.chunkManager.chunkGenerator
-        if (generator.structuresConfig.getForType(this) != null &&
-            generator.biomeSource.hasStructureFeature(this)
-        ) dimensions.add(it.registryKey.value)
+        if (it.canGenerate(this))
+            dimensions.add(it.registryKey.value)
     }
     return dimensions
+}
+
+fun ServerWorld.canGenerate(structure: StructureFeature<*>): Boolean {
+    val generator = chunkManager.chunkGenerator
+    val config = generator.structuresConfig
+    val registry = this.registryManager.get(Registry.BIOME_KEY)
+    if (config.getForType(structure) != null && structure == StructureFeature.STRONGHOLD)
+        return this.registryKey == World.OVERWORLD
+    val biomes: Set<String> = generator.biomeSource.biomes.mapNotNull(registry::getId).map(Identifier::toString).toSet()
+    for (biome in config.getConfiguredStructureFeature(structure).values()) {
+        if (biomes.contains(biome.value.toString()))
+            return true
+    }
+    return false
 }
 
 fun StructureFeature<*>.getDimensions(): List<Identifier> {
