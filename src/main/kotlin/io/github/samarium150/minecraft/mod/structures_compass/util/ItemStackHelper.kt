@@ -24,6 +24,9 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.registry.Registry
+import net.minecraft.util.registry.RegistryEntryList
+import net.minecraft.util.registry.RegistryKey
 import org.apache.logging.log4j.LogManager
 import kotlin.math.roundToInt
 
@@ -82,13 +85,22 @@ fun ItemStack.search(player: ServerPlayerEntity, structureId: Identifier) {
         val world = player.world as ServerWorld
         setStructure(structureId)
         player.sendMessage(TranslatableText("${prefix}msg_searching"), false)
-        val pos = world.locateStructure(structure, player.blockPos, radius, getSkip())
+        val registryEntryList = world.registryManager
+            .get(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY)
+            .getEntry(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, structureId))
+            .map {
+                RegistryEntryList.of(it)
+            }.get()
+        val result = world.chunkManager.chunkGenerator.locateStructure(
+            world, registryEntryList, player.blockPos, radius, getSkip()
+        )
         player.sendMessage(TranslatableText("${prefix}msg_done"), false)
-        if (pos == null) {
+        if (result == null) {
             removeTag(StructuresCompassItem.DIM_TAG)
             removeTag(StructuresCompassItem.POS_TAG)
             logger.info("$structureId not found")
         } else {
+            val pos = result.first
             val vec = pos.getDistanceVector(player)
             val distance = ((vec.length() * 100).roundToInt() / 100).toDouble()
             if (distance > 10000) {

@@ -25,7 +25,6 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
-import net.minecraft.world.World
 import net.minecraft.world.gen.feature.StructureFeature
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
@@ -52,15 +51,15 @@ fun StructureFeature<*>.getDimensions(world: ServerWorld): List<Identifier> {
 }
 
 fun ServerWorld.canGenerate(structure: StructureFeature<*>): Boolean {
-    val generator = chunkManager.chunkGenerator
-    val config = generator.structuresConfig
-    val registry = this.registryManager.get(Registry.BIOME_KEY)
-    if (config.getForType(structure) != null && structure == StructureFeature.STRONGHOLD)
-        return this.registryKey == World.OVERWORLD
-    val biomes: Set<String> = generator.biomeSource.biomes.mapNotNull(registry::getId).map(Identifier::toString).toSet()
-    for (biome in config.getConfiguredStructureFeature(structure).values()) {
-        if (biomes.contains(biome.value.toString()))
-            return true
+    val configured = this.registryManager.get(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY).filter {
+        it.feature == structure
+    }
+    if (configured.isNotEmpty()) {
+        val biomeSet = chunkManager.chunkGenerator.biomeSource.biomes.map { it.key.get().value }
+        for (biome in configured.flatMap { it.biomes.map { biome -> biome.key.get().value } }.distinct()) {
+            if (biomeSet.contains(biome))
+                return true
+        }
     }
     return false
 }
