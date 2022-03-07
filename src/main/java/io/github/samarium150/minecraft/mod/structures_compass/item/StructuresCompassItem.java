@@ -1,5 +1,6 @@
 package io.github.samarium150.minecraft.mod.structures_compass.item;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.samarium150.minecraft.mod.structures_compass.config.StructuresCompassConfig;
 import io.github.samarium150.minecraft.mod.structures_compass.network.StructuresCompassNetwork;
 import io.github.samarium150.minecraft.mod.structures_compass.network.packet.CompassSearchPacket;
@@ -9,9 +10,13 @@ import io.github.samarium150.minecraft.mod.structures_compass.util.ItemUtils;
 import io.github.samarium150.minecraft.mod.structures_compass.util.StructureUtils;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.*;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -22,6 +27,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -160,18 +167,26 @@ public final class StructuresCompassItem extends Item {
      * @see ServerLevel#findNearestMapFeature
      */
     public static void search(@Nonnull ServerLevel world, Player player, @Nonnull StructureFeature<?> structure, ItemStack stack) {
-        ResourceLocation registry = structure.getRegistryName();
-        assert registry != null;
-        setStructureName(registry.toString(), stack);
+        ResourceLocation structureRegistryName = structure.getRegistryName();
+        assert structureRegistryName != null;
+        setStructureName(structureRegistryName.toString(), stack);
         sendTranslatedMessage(GeneralUtils.prefix + "msg_searching", player);
-        BlockPos pos = world.findNearestMapFeature(
-            structure, player.blockPosition(), StructuresCompassConfig.radius.get(), isSkip(stack)
+        ChunkGenerator generator = world.getChunkSource().getGenerator();
+        HolderSet<ConfiguredStructureFeature<?, ?>> holderSet = world
+            .registryAccess()
+            .registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
+            .getHolder(ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, structureRegistryName))
+            .map(HolderSet::direct)
+            .orElseThrow();
+        Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>> result = generator.findNearestMapFeature(
+            world, holderSet, player.blockPosition(), StructuresCompassConfig.radius.get(), isSkip(stack)
         );
         sendTranslatedMessage(GeneralUtils.prefix + "msg_done", player);
-        if (pos == null) {
+        if (result == null) {
             ItemUtils.removeTag(stack, DIM_TAG);
             ItemUtils.removeTag(stack, POS_TAG);
         } else {
+            BlockPos pos = result.getFirst();
             Vec3 dis = StructureUtils.getDistance(pos, player);
             double distance = (double) Math.round(dis.length() * 100) / 100;
             if (distance > StructuresCompassConfig.maxDistance.get()) {
@@ -222,7 +237,8 @@ public final class StructuresCompassItem extends Item {
                     sendMessage(I18n.get(GeneralUtils.prefix + "msg_no_target"), player);
                     return super.use(world, player, hand);
                 }
-                StructureFeature<?> structure = StructureFeature.STRUCTURES_REGISTRY.get(name.replace("minecraft:", ""));
+                @SuppressWarnings("deprecation")
+                StructureFeature<?> structure = Registry.STRUCTURE_FEATURE.get(ResourceLocation.tryParse(name));
                 if (structure == null) {
                     sendMessage(I18n.get(GeneralUtils.prefix + "msg_error_name") + name, player);
                     return super.use(world, player, hand);

@@ -3,15 +3,12 @@ package io.github.samarium150.minecraft.mod.structures_compass.util;
 import io.github.samarium150.minecraft.mod.structures_compass.config.StructuresCompassConfig;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.StructureSettings;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,8 +19,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Utilities related to structures
@@ -154,18 +153,26 @@ public abstract class StructureUtils {
      */
     @Nonnull
     private static Boolean canGenerateStructure(@Nonnull ServerLevel world, StructureFeature<?> structure) {
-        ChunkGenerator generator = world.getChunkSource().getGenerator();
-        StructureSettings settings = generator.getSettings();
-        if (structure == StructureFeature.STRONGHOLD)
-            return world.dimension() == Level.OVERWORLD;
-        Set<String> biomes = generator.getBiomeSource().possibleBiomes().stream()
-            .map(Biome::getRegistryName)
-            .filter(Objects::nonNull)
-            .map(ResourceLocation::toString)
-            .collect(Collectors.toSet());
-        for (ResourceKey<Biome> biome : settings.structures(structure).values()) {
-            if (biomes.contains(biome.location().toString()))
-                return true;
+        List<ConfiguredStructureFeature<?, ?>> configured = world.registryAccess()
+            .registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
+            .stream()
+            .filter(configuredStructureFeature -> configuredStructureFeature.feature == structure)
+            .toList();
+        if (!configured.isEmpty()) {
+            List<ResourceLocation> biomeSet = world.getChunkSource().getGenerator()
+                .getBiomeSource()
+                .possibleBiomes()
+                .stream()
+                .map(holder -> holder.unwrapKey().orElseThrow().location())
+                .toList();
+            for (ResourceLocation biome : configured.stream()
+                .flatMap(configuredStructureFeature -> configuredStructureFeature.biomes.stream()
+                    .map(holder -> holder.unwrapKey().orElseThrow().location()))
+                .distinct().toList()
+            ) {
+                if (biomeSet.contains(biome))
+                    return true;
+            }
         }
         return false;
     }
