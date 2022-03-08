@@ -10,7 +10,7 @@ jobs:
     name: Gradle-Build
     
     # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -22,8 +22,8 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: 8
+          distribution: 'microsoft'
+          java-version: 17
       
       # Validate Gradle Wrapper
       - name: Gradle Wrapper Validation
