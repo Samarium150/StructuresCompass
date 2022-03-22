@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-
 package io.github.samarium150.minecraft.mod.structures_compass.network.packet.c2s
 
 import io.github.samarium150.minecraft.mod.structures_compass.data.StructuresCompassData
@@ -31,7 +30,7 @@ import net.minecraft.util.Identifier
 
 class RequestSyncPacket : PacketByteBuf(Unpooled.buffer()) {
 
-    companion object : ServerPlayNetworking.PlayChannelHandler {
+    companion object : PacketHandler {
 
         val ID = Identifier(MOD_ID, "request_sync_packet")
 
