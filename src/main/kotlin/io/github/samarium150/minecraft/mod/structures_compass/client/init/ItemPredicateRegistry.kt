@@ -14,17 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-
 package io.github.samarium150.minecraft.mod.structures_compass.client.init
 
 import io.github.samarium150.minecraft.mod.structures_compass.client.item.StructuresCompassItemPredicate
 import io.github.samarium150.minecraft.mod.structures_compass.init.ItemRegistry
-import net.fabricmc.fabric.api.`object`.builder.v1.client.model.FabricModelPredicateProviderRegistry
+import net.minecraft.client.item.ModelPredicateProviderRegistry
 import net.minecraft.util.Identifier
 
 object ItemPredicateRegistry {
     fun init() {
-        FabricModelPredicateProviderRegistry.register(
+        ModelPredicateProviderRegistry.register(
             ItemRegistry.STRUCTURES_COMPASS,
             Identifier("angle"),
             StructuresCompassItemPredicate
