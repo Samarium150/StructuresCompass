@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("fabric-loom")
     kotlin("jvm").version(System.getProperty("kotlinVersion"))
+    id("com.geoffgranum.gradle-conventional-changelog") version "0.3.1"
 }
 
 base {
@@ -62,5 +63,13 @@ tasks {
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
         withSourcesJar()
+    }
+
+    changelog {
+        appName = project.name
+        versionNum = "${project.version}"
+        from = "fabric-${project.property("prevVersion")}"
+        repoUrl = "https://github.com/Samarium150/StructuresCompass"
+        trackerUrl = "https://github.com/Samarium150/StructuresCompass/issues"
     }
 }
