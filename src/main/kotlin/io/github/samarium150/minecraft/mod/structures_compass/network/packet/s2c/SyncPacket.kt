@@ -22,7 +22,6 @@ import io.github.samarium150.minecraft.mod.structures_compass.util.MOD_ID
 import io.github.samarium150.minecraft.mod.structures_compass.util.getIdentifier
 import io.github.samarium150.minecraft.mod.structures_compass.util.getStructureFeature
 import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
@@ -37,7 +36,7 @@ class SyncPacket(
     structuresDimensionsMap: Map<StructureFeature<*>, List<Identifier>>
 ) : PacketByteBuf(Unpooled.buffer()) {
 
-    companion object : ClientPlayNetworking.PlayChannelHandler {
+    companion object : PacketHandler {
 
         val ID = Identifier(MOD_ID, "sync_packet")
 

@@ -21,7 +21,6 @@ import io.github.samarium150.minecraft.mod.structures_compass.util.MOD_ID
 import io.github.samarium150.minecraft.mod.structures_compass.util.setSkip
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.networking.v1.PacketSender
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayNetworkHandler
@@ -30,7 +29,7 @@ import net.minecraft.util.Identifier
 
 class SetSkipPacket(skip: Boolean) : PacketByteBuf(Unpooled.buffer()) {
 
-    companion object : ServerPlayNetworking.PlayChannelHandler {
+    companion object : PacketHandler {
 
         val ID = Identifier(MOD_ID, "set_skip")
 
