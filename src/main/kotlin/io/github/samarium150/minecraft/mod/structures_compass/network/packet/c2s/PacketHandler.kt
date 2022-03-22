@@ -14,17 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-package io.github.samarium150.minecraft.mod.structures_compass.client
+package io.github.samarium150.minecraft.mod.structures_compass.network.packet.c2s
 
-import io.github.samarium150.minecraft.mod.structures_compass.client.init.HudRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.client.init.ItemPredicateRegistry
-import io.github.samarium150.minecraft.mod.structures_compass.client.network.StructuresCompassClientNetwork
-import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.networking.v1.PacketSender
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.network.ServerPlayNetworkHandler
+import net.minecraft.server.network.ServerPlayerEntity
 
-object StructuresCompassClient : ClientModInitializer {
-    override fun onInitializeClient() {
-        ItemPredicateRegistry.init()
-        HudRegistry.init()
-        StructuresCompassClientNetwork.init()
-    }
+/**
+ * @see net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayChannelHandler
+ */
+fun interface PacketHandler {
+    fun receive(
+        server: MinecraftServer,
+        player: ServerPlayerEntity,
+        handler: ServerPlayNetworkHandler,
+        buf: PacketByteBuf,
+        responseSender: PacketSender
+    )
 }

@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
  */
-
 package io.github.samarium150.minecraft.mod.structures_compass.init
 
-import io.github.samarium150.minecraft.mod.structures_compass.command.GetCompass
+import io.github.samarium150.minecraft.mod.structures_compass.server.command.GetCompass
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 
 object CommandRegistry {

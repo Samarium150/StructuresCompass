@@ -18,9 +18,12 @@ package io.github.samarium150.minecraft.mod.structures_compass.client.network
 
 import io.github.samarium150.minecraft.mod.structures_compass.network.packet.s2c.SyncPacket
 import io.github.samarium150.minecraft.mod.structures_compass.util.MOD_ID
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import org.apache.logging.log4j.LogManager
 
+@Environment(EnvType.CLIENT)
 object StructuresCompassClientNetwork {
 
     private val logger = LogManager.getLogger("${MOD_ID}/client_network")
