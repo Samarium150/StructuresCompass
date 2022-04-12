@@ -175,8 +175,10 @@ public final class StructuresCompassItem extends Item {
         HolderSet<ConfiguredStructureFeature<?, ?>> holderSet = world
             .registryAccess()
             .registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
-            .getHolder(ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, structureRegistryName))
-            .map(HolderSet::direct)
+            .getHolder(ResourceKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY,
+                new ResourceLocation(structureRegistryName.getNamespace(),
+                    structureRegistryName.getPath().replace("endcity", "end_city"))
+            )).map(HolderSet::direct)
             .orElseThrow();
         Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>> result = generator.findNearestMapFeature(
             world, holderSet, player.blockPosition(), StructuresCompassConfig.radius.get(), isSkip(stack)
