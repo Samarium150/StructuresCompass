@@ -1,3 +1,11 @@
+<a name="1.18.2-1.4.2"></a>
+# 1.18.2-1.4.2 (2022/04/12)
+
+
+## Bug Fixes
+
+* correct identifier of end city in configured structure feature registry ([49ad6107](https://github.com/Samarium150/StructuresCompass/commits/49ad6107), closes [#19](https://github.com/Samarium150/StructuresCompass/issues/issues/19))
+
 <a name="1.18.2-1.4.1"></a>
 # 1.18.2-1.4.1 (2022/03/22)
 
