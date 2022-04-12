@@ -85,10 +85,11 @@ fun ItemStack.search(player: ServerPlayerEntity, structureId: Identifier) {
         val world = player.world as ServerWorld
         setStructure(structureId)
         player.sendMessage(TranslatableText("${prefix}msg_searching"), false)
-        val registryEntryList = world.registryManager
-            .get(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY)
-            .getEntry(RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY, structureId))
-            .map {
+        val registryEntryList = world.registryManager.get(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY)
+            .getEntry(
+                RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY,
+                    Identifier(structureId.namespace, structureId.path.replace("endcity", "end_city")))
+            ).map {
                 RegistryEntryList.of(it)
             }.get()
         val result = world.chunkManager.chunkGenerator.locateStructure(
